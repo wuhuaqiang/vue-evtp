@@ -24,24 +24,17 @@
           <span>{{ scope.row.row_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="'配置id'" align="center">
+      <el-table-column :label="'排序名称\n(ordererName)'" align="center">
         <template slot-scope="{row}">
           <el-tag>
-            {{ row.league_id }}
+            {{ row.orderer_name }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="'用户名'" align="center">
+      <el-table-column :label="'排序地址\n(ordererLocation)'" align="center">
         <template slot-scope="{row}">
           <el-tag>
-            {{ row.name }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="'账号'" align="center">
-        <template slot-scope="{row}">
-          <el-tag>
-            {{ row.account }}
+            {{ row.orderer_location }}
           </el-tag>
         </template>
       </el-table-column>
@@ -62,21 +55,23 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="250px" class="demo-form-inline" style="width:80%; margin-left:20px;">
         <el-form-item size="small" :label="'配置信息(configInfo)'">
-          <el-select v-model="temp.league_id" class="filter-item" placeholder="Please select" style="width: 210px" @change="changeAll">
+          <el-select v-model="temp.config_id" class="filter-item" placeholder="Please select" style="width: 210px" @change="changeAll">
             <el-option v-for="item in configOptions" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="'请输入用户'">
-          <el-input v-model="temp.name" placeholder="请输入用户" />
+        <el-form-item :label="'排序名称(ordererName)'">
+          <el-input v-model="temp.orderer_name" type="number" :min="0" :max="2">
+            <template slot="prepend">orderer</template>
+            <template slot="append">.example.com</template>
+            <!--<el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>-->
+          </el-input>
         </el-form-item>
-        <el-form-item :label="'账号'">
-          <el-input v-model="temp.account" placeholder="请输入账号" />
-        </el-form-item>
-        <el-form-item v-show="textMap[dialogStatus]==='新增'" :label="'密码'">
-          <el-input v-model="temp.password" type="password" placeholder="请输入密码" />
-        </el-form-item>
-        <el-form-item v-show="textMap[dialogStatus]==='新增'" :label="'确认密码'">
-          <el-input v-model="temp.passwordSur" type="password" placeholder="再次输入密码" />
+        <el-form-item :label="'排序地址(ordererLocation)'">
+          <el-input v-model="temp.orderer_location" placeholder="请输入IP地址">
+            <template slot="prepend">grpc://</template>
+            <template slot="append">:7050</template>
+          </el-input>
+          <!--<el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />-->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -93,7 +88,7 @@
 
 <script>
 import { queryFabricConfigList } from '@/api/fabricConfig'
-import { queryFabricUserList, createFabricUser, updateFabricUser } from '@/api/fabricUser'
+import { queryFabricOrdererList, createFabricOrderer, updateFabricOrderer } from '@/api/fabricOrderer'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -130,7 +125,7 @@ const channel_nameOptions = [
 ]
 
 export default {
-  name: 'FabricUser',
+  name: 'FabricOrder',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -165,12 +160,10 @@ export default {
       ordererOptions,
       temp: {
         row_id: '', // 序号
-        name: '', // 用户名
-        account: '', // 帐户
-        password: '', // 密码
-        passwordSur: '',
-        league_id: '', // 配置id
-        is_delete: 0// 是否删除
+        orderer_name: '', // 排序名称
+        orderer_location: '', // 排序地址
+        config_id: '', // 配置ID
+        is_delete: 0 // 是否删除
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -196,7 +189,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      queryFabricUserList(this.listQuery).then(response => {
+      queryFabricOrdererList(this.listQuery).then(response => {
         console.log(response.data)
         this.list = response.data
         this.total = response.data.total
@@ -244,12 +237,10 @@ export default {
     resetTemp() {
       this.temp = {
         row_id: '', // 序号
-        name: '', // 用户名
-        account: '', // 帐户
-        password: '', // 密码
-        passwordSur: '',
-        league_id: '', // 配置id
-        is_delete: 0// 是否删除
+        orderer_name: '', // 排序名称
+        orderer_location: '', // 排序地址
+        config_id: '', // 配置ID
+        is_delete: 0 // 是否删除
       }
     },
     handleCreate() {
@@ -263,7 +254,15 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.row_id = parseInt(Math.random() * 100) + 1024 // mock a id
+          // this.temp.map((item, index, array) => {
+          //   console.log(item)
+          //   console.log(index)
+          //   console.log(array)
+          // })
+          this.temp.league_id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.row_id = this.temp.league_id
+          this.temp.orderer_location = 'grpc://' + this.temp.orderer_location + ':7050'
+          this.temp.orderer_name = 'orderer' + this.temp.orderer_name + '.example.com'
           for (const key in this.temp) {
             if (typeof this.temp[key] === 'string' && this.temp[key] == null || this.temp[key].length < 1) {
               this.$notify({
@@ -278,7 +277,7 @@ export default {
           debugger
           console.log(this.temp)
           this.dialogFormVisible = false
-          createFabricUser(this.temp).then(() => {
+          createFabricOrderer(this.temp).then(() => {
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -294,6 +293,8 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      this.temp.orderer_location = this.temp.orderer_location.substring(7).split(':')[0]
+      this.temp.orderer_name = this.temp.orderer_name.substring(7).split('.')[0]
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -303,10 +304,12 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.temp.orderer_location = 'grpc://' + this.temp.orderer_location + ':7050'
+          this.temp.orderer_name = 'orderer' + this.temp.orderer_name + '.example.com'
           const tempData = Object.assign({}, this.temp)
           // tempData.orderer_location = 'grpc://' + tempData.orderer_location + ':7050'
           // tempData.orderer_name = 'orderer' + tempData.orderer_name + '.example.com'
-          updateFabricUser(tempData).then(() => {
+          updateFabricOrderer(tempData).then(() => {
             debugger
             for (const v of this.list) {
               if (v.row_id === this.temp.row_id) {
@@ -327,7 +330,7 @@ export default {
       })
     },
     handleDelete(row) {
-      /* delFabricUser(row.row_id).then(() => {
+      /* delFabricOrderer(row.row_id).then(() => {
         this.$notify({
           title: 'Success',
           message: 'Delete Successfully',
@@ -339,7 +342,7 @@ export default {
       })*/
       row.is_delete = 1
       debugger
-      updateFabricUser(row).then(() => {
+      updateFabricOrderer(row).then(() => {
         this.$notify({
           title: '成功!',
           message: '删除成功',
