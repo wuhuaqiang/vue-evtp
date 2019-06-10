@@ -23,6 +23,15 @@
           placeholder="请输入内容"
         />
       </el-form-item>
+      <el-form-item size="small" :label="'结果'">
+        <el-input
+          v-model="result"
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          placeholder=""
+          readonly="true"
+        />
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = true">
@@ -32,19 +41,7 @@
         执行
       </el-button>
     </div>
-    <el-dialog :title="'上传智能合约'" :visible.sync="dialogFormVisible" width="50%">
-      <!--<el-upload-->
-      <!--class="upload-demo"-->
-      <!--ref="upload"-->
-      <!--action="/api/smartContracts/multifileUpload"-->
-      <!--:on-preview="handlePreview"-->
-      <!--:on-remove="handleRemove"-->
-      <!--:file-list="fileList"-->
-      <!--:multiple="true"-->
-      <!--:auto-upload="false">-->
-      <!--<el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
-      <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>-->
-      <!--</el-upload>-->
+    <el-dialog :title="'上传智能合约'" :visible.sync="dialogFormVisible" width="30%">
       <el-upload
         ref="upload"
         action="/api/smartContracts/multifileUpload"
@@ -66,11 +63,10 @@
 </template>
 
 <script>
-import { } from '@/api/fabricOrderer'
 import waves from '@/directive/waves' // waves directive
 import request from '@/utils/request-api'
 export default {
-  name: 'FabricOrder',
+  name: 'FabricChainblock',
   components: { },
   directives: { waves },
   filters: {
@@ -85,6 +81,7 @@ export default {
   },
   data() {
     return {
+      result: '',
       uploadLogo: '',
       fileData: '',
       dialogFormVisible: false,
@@ -109,19 +106,27 @@ export default {
       this.$refs.upload.submit()
       this.uploadLogo = '1'
       var that = this
-      request({
-        method: 'post',
-        url: '/smartContracts/multifileUpload',
-        data: that.fileData,
-        contentType: false, // 这里不要落下
-        dataType: 'json'
-      }).then(response => {
-        if (response.code === 200) {
-          that.uploadLogo = '2'
-        } else {
-          that.uploadLogo = '3'
-        }
-      })
+      if (this.$refs.upload.uploadFiles.length) {
+        request({
+          method: 'post',
+          url: '/smartContracts/multifileUpload',
+          data: that.fileData,
+          contentType: false, // 这里不要落下
+          dataType: 'json'
+        }).then(response => {
+          if (response.code === 200) {
+            that.uploadLogo = '2'
+          } else {
+            that.uploadLogo = '3'
+          }
+        })
+      } else {
+        this.uploadLogo = ''
+        this.$message({
+          message: '请选择上传的文件',
+          type: 'error'
+        })
+      }
     },
     uploadFile(file) {
       this.fileData.append('file', file.file)
@@ -131,6 +136,110 @@ export default {
     },
     handlePreview(file) {
       console.log(file)
+    },
+    execute() {
+      switch (this.functionOption) {
+        case '安装智能合约':
+          this.install()
+          break
+        case '实例化智能合约':
+          this.instantiate()
+          break
+        case '升级智能合约':
+          this.upgrade()
+          break
+        case '执行智能合约':
+          this.invoke()
+          break
+        case '查询智能合约':
+          this.query()
+          break
+      }
+    },
+    install() {
+      request({
+        url: '/chaincode/install',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: this.temp
+      }).then(response => {
+        if (response.code === 200) {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        } else {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        }
+      })
+    },
+    instantiate() {
+      request({
+        url: '/chaincode/instantiate',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: this.temp
+      }).then(response => {
+        if (response.code === 200) {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        } else {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        }
+      })
+    },
+    upgrade() {
+      request({
+        url: '/chaincode/upgrade',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: this.temp
+      }).then(response => {
+        if (response.code === 200) {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        } else {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        }
+      })
+    },
+    invoke() {
+      request({
+        url: '/chaincode/invoke',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: this.temp
+      }).then(response => {
+        if (response.code === 200) {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        } else {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        }
+      })
+    },
+    query() {
+      request({
+        url: '/chaincode/query',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: this.temp
+      }).then(response => {
+        if (response.code === 200) {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        } else {
+          this.result = JSON.stringify(response.data)
+          console.log(response.data)
+        }
+      })
     }
   }
 }

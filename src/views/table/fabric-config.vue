@@ -31,13 +31,13 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="'用户名称\n(Username)'" width="180" align="center">
+      <!--<el-table-column :label="'用户名称\n(Username)'" width="180" align="center">
         <template slot-scope="{row}">
           <el-tag>
             {{ row.user_name }}
           </el-tag>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column :label="'证书路径\n(CryptoConfigPath)'" width="180" align="center">
         <template slot-scope="{row}">
           <el-tag>
@@ -253,7 +253,7 @@
 </template>
 
 <script>
-import { queryFabricConfigList, queryFabricConfigById, delFabricConfig, createFabricConfig, updateFabricConfig } from '@/api/fabricConfig'
+import { queryFabricConfigList, createFabricConfig, updateFabricConfig } from '@/api/fabricConfig'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
