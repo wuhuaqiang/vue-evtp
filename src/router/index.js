@@ -199,6 +199,30 @@ export const asyncRoutes = [
         meta: { title: '链码管理' }
       }
     ]
+  },
+  {
+    path: '/sell',
+    component: Layout,
+    redirect: '/sell/sell-list',
+    name: 'SellList',
+    meta: {
+      title: '商品列表',
+      icon: 'international'
+    },
+    children: [
+      {
+        path: 'car-list',
+        component: () => import('@/views/car/car-list'),
+        name: 'CarList',
+        meta: { title: '汽车列表' }
+      },
+      {
+        path: 'power-list',
+        component: () => import('@/views/car/power-list'),
+        name: 'PowerList',
+        meta: { title: '电量列表' }
+      }
+    ]
   }
 ]
 
