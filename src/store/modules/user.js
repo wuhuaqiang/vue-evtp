@@ -1,11 +1,13 @@
 import { login, logout, getInfo } from '@/api/user'
 import { logonIn } from '@/api/fabricCommon'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getAccount, setAccount, removeAccount } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
   name: '',
+  userName: '',
+  account: getAccount(),
   avatar: '',
   introduction: '',
   roles: []
@@ -26,6 +28,12 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ACCOUNT: (state, account) => {
+    state.account = account
+  },
+  SET_USERNAME: (state, userName) => {
+    state.userName = userName
   }
 }
 
@@ -50,7 +58,10 @@ const actions = {
         const { data } = response
         data.token = 'admin-token'
         commit('SET_TOKEN', data.token)
+        commit('SET_ACCOUNT', data.account)
+        commit('SET_USERNAME', data.name)
         setToken(data.token)
+        setAccount(data.account)
         resolve()
       }).catch(error => {
         reject(error)
@@ -92,7 +103,9 @@ const actions = {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
+        commit('SET_ACCOUNT', '')
         removeToken()
+        removeAccount()
         resetRouter()
         resolve()
       }).catch(error => {
