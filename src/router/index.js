@@ -140,7 +140,7 @@ export const asyncRoutes = [
     redirect: '/table/fabric-config',
     name: 'FabricConfig',
     meta: {
-      title: '配置',
+      title: '区块链配置',
       icon: 'table'
     },
     children: [
