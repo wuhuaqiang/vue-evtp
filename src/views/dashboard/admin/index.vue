@@ -1,77 +1,83 @@
 <template>
-  <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true" @ready="handler">
-    <bm-control>
-      <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-        <el-radio-button :label="false">展开</el-radio-button>
-        <el-radio-button :label="true">收起</el-radio-button>
-      </el-radio-group>
-      <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen" @close="handleClose">
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location" />
-            <span slot="title">导航一</span>
-          </template>
-          <el-menu-item-group>
-            <span slot="title">分组一</span>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <span slot="title">选项4</span>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-menu-item index="2">
-          <i class="el-icon-menu" />
-          <span slot="title">导航二</span>
-        </el-menu-item>
-        <el-menu-item index="3">
-          <!--disabled-->
-          <i class="el-icon-document" />
-          <span slot="title">导航三</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-setting" />
-          <span slot="title">导航四</span>
-        </el-menu-item>
-      </el-menu>
-    </bm-control>
-    <bm-copyright
-      anchor="BMAP_ANCHOR_TOP_RIGHT"
-      :copyright="[{id: 1, content: 'Copyright Message', bounds: {ne: {lng: 110, lat: 40}, sw:{lng: 0, lat: 0}}}, {id: 2, content: '<a>电量交易系统专用地图</a>'}]"
-    />
-    <!--<bm-panorama></bm-panorama>-->
-    <!-- <bm-marker
-      v-for="(item) in tElectricVehiclePoints"
-      :label="item.label"
-      :position="item.point"
-      :dragging="true"
-      :icon="icon"
-    >
-      &lt;!&ndash;<bm-label content="我爱北京天安门" :labelStyle="{color: 'red', fontSize : '12px'}" :offset="{width: -35, height: 30}"/>&ndash;&gt;
-      &lt;!&ndash;animation="BMAP_ANIMATION_BOUNCE"&ndash;&gt;
-    </bm-marker>-->
-    <bm-tile
-      :is-transparent-png="true"
-      tile-url-template="//developer.baidu.com/map/jsdemo/demo/tiles/{Z}/tile{X}_{Y}.png"
-    />
-    <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
-    <bm-scale anchor="BMAP_ANCHOR_TOP_RIGHT" />
-    <bm-navigation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" />
-    <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_RIGHT" />
-    <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
-    <bm-polyline
-      :path="polygonPath"
-      stroke-color="blue"
-      :stroke-opacity="0.5"
-      :stroke-weight="2"
-      :editing="true"
-      @lineupdate="updatePolygonPath"
-    />
-  </baidu-map>
+  <div class="evtp-container">
+    <div class="left-container">
+      <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true" @ready="handler">
+        <!--<bm-control>-->
+        <!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
+        <!--<el-radio-button :label="false">展开</el-radio-button>-->
+        <!--<el-radio-button :label="true">收起</el-radio-button>-->
+        <!--</el-radio-group>-->
+        <!--<el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen" @close="handleClose">-->
+        <!--<el-submenu index="1">-->
+        <!--<template slot="title">-->
+        <!--<i class="el-icon-location" />-->
+        <!--<span slot="title">导航一</span>-->
+        <!--</template>-->
+        <!--<el-menu-item-group>-->
+        <!--<span slot="title">分组一</span>-->
+        <!--<el-menu-item index="1-1">选项1</el-menu-item>-->
+        <!--<el-menu-item index="1-2">选项2</el-menu-item>-->
+        <!--</el-menu-item-group>-->
+        <!--<el-menu-item-group title="分组2">-->
+        <!--<el-menu-item index="1-3">选项3</el-menu-item>-->
+        <!--</el-menu-item-group>-->
+        <!--<el-submenu index="1-4">-->
+        <!--<span slot="title">选项4</span>-->
+        <!--<el-menu-item index="1-4-1">选项1</el-menu-item>-->
+        <!--</el-submenu>-->
+        <!--</el-submenu>-->
+        <!--<el-menu-item index="2">-->
+        <!--<i class="el-icon-menu" />-->
+        <!--<span slot="title">导航二</span>-->
+        <!--</el-menu-item>-->
+        <!--<el-menu-item index="3">-->
+        <!--&lt;!&ndash;disabled&ndash;&gt;-->
+        <!--<i class="el-icon-document" />-->
+        <!--<span slot="title">导航三</span>-->
+        <!--</el-menu-item>-->
+        <!--<el-menu-item index="4">-->
+        <!--<i class="el-icon-setting" />-->
+        <!--<span slot="title">导航四</span>-->
+        <!--</el-menu-item>-->
+        <!--</el-menu>-->
+        <!--</bm-control>-->
+        <bm-copyright
+          anchor="BMAP_ANCHOR_TOP_RIGHT"
+          :copyright="[{id: 1, content: 'Copyright Message', bounds: {ne: {lng: 110, lat: 40}, sw:{lng: 0, lat: 0}}}, {id: 2, content: '<a>电量交易系统专用地图</a>'}]"
+        />
+        <!--<bm-panorama></bm-panorama>-->
+        <bm-marker
+          v-for="(item,key) in tElectricVehiclePoints"
+          :key="key"
+          :label="item.label"
+          :position="item.point"
+          :dragging="true"
+          :icon="icon"
+        />
+        <!--<bm-label content="我爱北京天安门" :labelStyle="{color: 'red', fontSize : '12px'}" :offset="{width: -35, height: 30}"/>
+        animation="BMAP_ANIMATION_BOUNCE"-->
+        <!--</bm-marker>-->
+        <bm-tile
+          :is-transparent-png="true"
+          tile-url-template="//developer.baidu.com/map/jsdemo/demo/tiles/{Z}/tile{X}_{Y}.png"
+        />
+        <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
+        <bm-scale anchor="BMAP_ANCHOR_TOP_RIGHT" />
+        <bm-navigation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" />
+        <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_RIGHT" />
+        <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
+        <bm-polyline
+          :path="polygonPath"
+          stroke-color="blue"
+          :stroke-opacity="0.5"
+          :stroke-weight="2"
+          :editing="true"
+          @lineupdate="updatePolygonPath"
+        />
+      </baidu-map>
+    </div>
+    <div class="right-container" />
+  </div>
 </template>
 <script>
 // import { connectionSocket, disconnectSocket } from '@/utils/websocket'
@@ -277,9 +283,12 @@ export default {
       padding: 8px;
     }
   }
-</style>
-<style>
-  .BMap_CityListCtrl{
-    left: 250px !important;
+  .right-container{
+    display: inline-flex;
+    width: 50%;
+  }
+  .left-container{
+    display: inline-flex;
+    width: 50%;
   }
 </style>
