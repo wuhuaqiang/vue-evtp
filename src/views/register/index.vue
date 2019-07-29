@@ -114,7 +114,7 @@ export default {
       this.$refs['registerForm'].validate((valid) => {
         if (valid) {
           register(this.registerForm).then(response => {
-            console.log(this.registerForm)
+            console.log(response)
           })
         }
       })

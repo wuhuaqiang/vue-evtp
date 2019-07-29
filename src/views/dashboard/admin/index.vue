@@ -1,20 +1,59 @@
 <template>
   <baidu-map class="map" :center="center" :zoom="zoom" :scroll-wheel-zoom="true" @ready="handler">
+    <bm-control>
+      <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+        <el-radio-button :label="false">展开</el-radio-button>
+        <el-radio-button :label="true">收起</el-radio-button>
+      </el-radio-group>
+      <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen" @close="handleClose">
+        <el-submenu index="1">
+          <template slot="title">
+            <i class="el-icon-location" />
+            <span slot="title">导航一</span>
+          </template>
+          <el-menu-item-group>
+            <span slot="title">分组一</span>
+            <el-menu-item index="1-1">选项1</el-menu-item>
+            <el-menu-item index="1-2">选项2</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group title="分组2">
+            <el-menu-item index="1-3">选项3</el-menu-item>
+          </el-menu-item-group>
+          <el-submenu index="1-4">
+            <span slot="title">选项4</span>
+            <el-menu-item index="1-4-1">选项1</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+        <el-menu-item index="2">
+          <i class="el-icon-menu" />
+          <span slot="title">导航二</span>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <!--disabled-->
+          <i class="el-icon-document" />
+          <span slot="title">导航三</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <i class="el-icon-setting" />
+          <span slot="title">导航四</span>
+        </el-menu-item>
+      </el-menu>
+    </bm-control>
     <bm-copyright
       anchor="BMAP_ANCHOR_TOP_RIGHT"
       :copyright="[{id: 1, content: 'Copyright Message', bounds: {ne: {lng: 110, lat: 40}, sw:{lng: 0, lat: 0}}}, {id: 2, content: '<a>电量交易系统专用地图</a>'}]"
     />
     <!--<bm-panorama></bm-panorama>-->
-    <bm-marker
+    <!-- <bm-marker
       v-for="(item) in tElectricVehiclePoints"
       :label="item.label"
       :position="item.point"
       :dragging="true"
       :icon="icon"
     >
-      <!--<bm-label content="我爱北京天安门" :labelStyle="{color: 'red', fontSize : '12px'}" :offset="{width: -35, height: 30}"/>-->
-      <!--animation="BMAP_ANIMATION_BOUNCE"-->
-    </bm-marker>
+      &lt;!&ndash;<bm-label content="我爱北京天安门" :labelStyle="{color: 'red', fontSize : '12px'}" :offset="{width: -35, height: 30}"/>&ndash;&gt;
+      &lt;!&ndash;animation="BMAP_ANIMATION_BOUNCE"&ndash;&gt;
+    </bm-marker>-->
     <bm-tile
       :is-transparent-png="true"
       tile-url-template="//developer.baidu.com/map/jsdemo/demo/tiles/{Z}/tile{X}_{Y}.png"
@@ -44,6 +83,7 @@ export default {
   data() {
     return {
       stompClient: '',
+      isCollapse: true,
       timer: '',
       icon: {
         url: 'http://10.168.1.130:8088/api/images/car_normal.png',
@@ -179,6 +219,12 @@ export default {
         console.log(this.tElectricVehiclePoints)
       })
     },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath)
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath)
+    },
     moveStep() {
       // if (this.tElectricVehiclePoints) {
       //   for (const item of this.tElectricVehiclePoints) {
@@ -218,10 +264,22 @@ export default {
       margin-bottom: 32px;
     }
   }
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
+  .el-icon-arrow-down:before {
+    content: "\E6DF";
+  }
 
   @media (max-width: 1024px) {
     .chart-wrapper {
       padding: 8px;
     }
+  }
+</style>
+<style>
+  .BMap_CityListCtrl{
+    left: 250px !important;
   }
 </style>
