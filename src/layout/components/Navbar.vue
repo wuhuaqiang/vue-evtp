@@ -3,16 +3,16 @@
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-
+    <p class="evtp-title">基于区块链技术的电动汽车P2P电量交易仿真系统</p>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
         <error-log class="errLog-container right-menu-item hover-effect" />
 
-       <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" />-->
+        <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" />-->
 
-     <!--   <el-tooltip content="Global Size" effect="dark" placement="bottom">
+        <!--   <el-tooltip content="Global Size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>-->
 
@@ -25,16 +25,16 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <!--<router-link to="/profile/index">-->
-            <!--<el-dropdown-item>Profile</el-dropdown-item>-->
+          <!--<el-dropdown-item>Profile</el-dropdown-item>-->
           <!--</router-link>-->
           <router-link to="/">
             <el-dropdown-item>首页</el-dropdown-item>
           </router-link>
           <!--<a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">-->
-            <!--<el-dropdown-item>Github</el-dropdown-item>-->
+          <!--<el-dropdown-item>Github</el-dropdown-item>-->
           <!--</a>-->
           <!--<a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">-->
-            <!--<el-dropdown-item>Docs</el-dropdown-item>-->
+          <!--<el-dropdown-item>Docs</el-dropdown-item>-->
           <!--</a>-->
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出</span>
@@ -111,7 +111,14 @@ export default {
     display: inline-block;
     vertical-align: top;
   }
-
+  .evtp-title{
+    font-size: 25px;
+    color: #0a76a4;
+    position: fixed;
+    top:-20px;
+    left: 40%;
+    text-align: center !important;
+  }
   .right-menu {
     float: right;
     height: 100%;
