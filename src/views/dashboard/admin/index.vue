@@ -149,7 +149,7 @@ export default {
       msg: 'SocketJS',
       websocket: null,
       center: '成都',
-      zoom: 15,
+      zoom: 13,
       polygonPath: [
         { lng: 103.940118, lat: 30.734065 },
         { lng: 104.208116, lat: 30.734065 },
