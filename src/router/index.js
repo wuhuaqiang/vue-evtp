@@ -135,6 +135,30 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
+    path: '/simulationSysMsg',
+    component: Layout,
+    redirect: '/table/fabric-config',
+    name: 'SimulationSysMsg',
+    meta: {
+      title: '模拟系统管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'simulationParameter-setting',
+        component: () => import('@/views/table/simulationParameterSetting'),
+        name: 'simulationParameterSetting',
+        meta: { title: '模拟参数设置' }
+      },
+      {
+        path: 'simulationResults-analysis',
+        component: () => import('@/views/table/fabric-config'),
+        name: 'simulationResultsAnalysis',
+        meta: { title: '模拟结果分析' }
+      }
+    ]
+  },
+  {
     path: '/fabricConfig',
     component: Layout,
     redirect: '/table/fabric-config',

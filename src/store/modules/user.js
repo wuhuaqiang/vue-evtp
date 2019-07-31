@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { logout, getInfo } from '@/api/user' // login,
 import { logonIn } from '@/api/fabricCommon'
 import { getToken, setToken, removeToken, getAccount, setAccount, removeAccount } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
@@ -43,7 +43,7 @@ const actions = {
     debugger
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-    /*  login({ username: username.trim(), password: password }).then(response => {
+      /* login({ username: username.trim(), password: password }).then(response => {
         debugger
         const { data } = response
         commit('SET_TOKEN', data.token)
