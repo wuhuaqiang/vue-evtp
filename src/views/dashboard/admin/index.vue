@@ -1236,7 +1236,7 @@ export default {
       var p4 = new BMap.Point(103.940602, 30.715246) */
       var p1 = new BMap.Point(104.126948, 30.600384)
       var p2 = new BMap.Point(104.126948, 30.600384)
-      var p3 = new BMap.Point(104.15918, 30.713558)
+      var p3 = new BMap.Point(104.168666, 30.690083)
       var p4 = new BMap.Point(104.044412, 30.724362)
 
       var options = {
