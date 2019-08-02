@@ -58,7 +58,7 @@
             />
             <bm-marker
               v-for="(item,key) in tChargingStations"
-              :key="key"
+              :key="('0'+key)"
               :label="item.label"
               :position="item.point"
               :dragging="true"
@@ -108,6 +108,7 @@
 // import { connectionSocket, disconnectSocket } from '@/utils/websocket'
 import axios from 'axios'
 import { getAllListWithLine } from '@/api/electricVehicle'
+import { save } from '@/api/evtpPoints'
 import { list } from '@/api/chargingStation'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
@@ -120,6 +121,8 @@ export default {
       isCollapse: true,
       upColor: '#00da3c',
       downColor: '#ec0000',
+      BMap: '',
+      map: '',
       timer: '',
       carIcon: {
         url: 'http://10.168.1.125:8088/api/images/car_normal.png',
@@ -144,6 +147,7 @@ export default {
         }
       },
       tElectricVehiclePoints: [],
+      ResultArray: [],
       tChargingStations: [],
       point: { lng: 103.980118, lat: 30.634065 },
       msg: 'SocketJS',
@@ -161,6 +165,7 @@ export default {
   },
   created() {
     console.log(this)
+    // console.log(this)
     setInterval(this.moveStep, 1000)
     this.getAllElectricVehicles()
     this.getAllTChargingStation()
@@ -254,10 +259,8 @@ export default {
   methods: {
     handler({ BMap, map }) {
       this.drawBoundary(BMap, map)
-      console.log(BMap, map)
-      // this.center.lng = 116.404
-      // this.center.lat = 39.915
-      // this.zoom = 15
+      this.BMap = BMap
+      this.map = map
     },
     splitData(rawData) {
       var categoryData = []
@@ -274,6 +277,64 @@ export default {
         values: values,
         volumes: volumes
       }
+    },
+    /**
+     * @param key 编号
+     * @param value 关键字
+     * @param type 关键字分类
+     * @param centerPoint 搜索中心点
+     * @param r 搜索半径
+     */
+    savePoints(key, value, type, centerPoint, r) {
+      const this_ = this
+      this_.ResultArray.clear
+      const options = {
+        pageCapacity: 50,
+        onSearchComplete: function(results) {
+          // 需要获取当前搜索总共有多少条结果
+          const totalResults = results.getNumPois()
+          if (!totalResults) {
+            return
+          }
+          // 需要获取当前搜索总共有多少条结果
+          var totalPages = results.getNumPages()
+          var currPage = results.getPageIndex()// 获取当前是第几页数据
+          const ResultArray = []
+          if (currPage < totalPages - 1) {
+            this_.ResultArray.push(...results.Ar)
+            local.gotoPage(currPage + 1)
+            console.log(ResultArray)
+          } else {
+            this_.ResultArray.push(...results.Ar)
+            // map.clearOverlays()
+            for (const store of this_.ResultArray) {
+              const obj = {}
+              obj.id = store.uid
+              obj.lat = store.point.lat
+              obj.lng = store.point.lng
+              obj.title = store.title
+              obj.address = store.address
+              // obj.remark = '家'
+              // obj.type = 0
+              obj.remark = type
+              obj.type = key
+              save(JSON.stringify(obj)).then(response => {
+                console.log(response)
+              })
+              const marker = new this_.BMap.Marker(store.point)
+              this_.map.addOverlay(marker)
+            }
+          }
+        }
+      }
+      const local = new this.BMap.LocalSearch(this.map, options)
+      local.searchNearby(value, centerPoint, r)
+      // local.search('公园')
+      // const mPoint = new this.BMap.Point(104.07, 30.67)
+      // local.searchNearby('地产小区', mPoint, 5000)
+      // local.searchNearby('小区/楼盘', mPoint, 5000)
+      // local.searchNearby('公司', mPoint, 5000)
+      // local.searchNearby('写字楼', mPoint, 5000)
     },
     calculateMA(dayCount, data) {
       var result = []
@@ -552,7 +613,7 @@ export default {
       axios.get('http://10.168.1.125:8088/api/images/stock-DJI.json').then((rawData) => {
         const data = this_.splitData(rawData.data)
         // debugger
-        console.log(data)
+        // console.log(data)
         const myChart = echarts.init(document.getElementById('echartsNum3'))
         myChart.setOption({
           backgroundColor: '#fff',
@@ -823,7 +884,7 @@ export default {
         const data = result.data
         data.map(obj => {
           obj[1] = Math.random()
-          console.log(obj)
+          // console.log(obj)
         })
         const myChart = echarts.init(document.getElementById('echartsNum1'))
         myChart.setOption({
@@ -1163,7 +1224,7 @@ export default {
         if (response.code === 200) {
           const tElectricVehicles = response.data
           for (const item of tElectricVehicles) {
-            console.log(item)
+            // console.log(item)
             const positionArr = item.positionVal.split(',')
             const point = {
               lng: parseFloat(positionArr[0]),
@@ -1181,17 +1242,17 @@ export default {
             this.tElectricVehiclePoints.push(marker)
           }
         }
-        console.log(response)
-        console.log(this.tElectricVehiclePoints)
+        // console.log(response)
+        // console.log(this.tElectricVehiclePoints)
       })
     },
     getAllTChargingStation() {
       list().then(response => {
         if (response.code === 200) {
-          console.log(response)
+          // console.log(response)
           const tElectricVehicles = response.data
           for (const item of tElectricVehicles) {
-            console.log(item)
+            // console.log(item)
             const positionArr = item.positionVal.split(',')
             const point = {
               lng: parseFloat(positionArr[0]),
@@ -1244,20 +1305,20 @@ export default {
         onSearchComplete(results) {
           this_.polygonPath = []
           const points = results.xr[0].dk
-          console.log(points)
+          // console.log(points)
           points.map(obj => {
-            console.log(obj)
+            // console.log(obj)
             obj.zr.map(k => {
               this_.polygonPath.push(k)
             })
           })
-          console.log('******************************')
-          console.log(results)
-          console.log('******************************')
-          // this_.polygonPath = results.xr[0].dk[2].zr
-          console.log('******************************')
-          console.log(this_.polygonPath)
-          console.log('******************************')
+          // console.log('******************************')
+          // console.log(results)
+          // console.log('******************************')
+          // // this_.polygonPath = results.xr[0].dk[2].zr
+          // console.log('******************************')
+          // console.log(this_.polygonPath)
+          // console.log('******************************')
         /*  debugger
           if (driving.getStatus() === BMAP_STATUS_SUCCESS) {
             // 获取第一条方案
