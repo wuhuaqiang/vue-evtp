@@ -6,40 +6,43 @@
         <fieldset disabled>
           <legend>电动汽车参数设置</legend>
           <el-form-item label="电动汽车数量">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.electricVehicleNumber" />
           </el-form-item>
           <el-form-item label="电池容量">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.batteryCapacity" />
           </el-form-item>
           <el-form-item label="充电效率">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.chargingEfficiency" />
           </el-form-item>
           <el-form-item label="充电速度">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.chargingSpeed" />
+          </el-form-item>
+          <el-form-item label="电动汽车耗电量">
+            <el-input v-model="form.powerConsumptionPerKilometer" />
           </el-form-item>
         </fieldset>
         <fieldset disabled>
           <legend>充电站参数设置</legend>
           <el-form-item label="充电站数量">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.chargingStationNumber" />
           </el-form-item>
           <el-form-item label="充电桩个数">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.chargingPileNumber" />
           </el-form-item>
           <el-form-item label="停车位">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.parkingSpaceNumber" />
           </el-form-item>
         </fieldset>
         <fieldset disabled>
           <legend>仿真策略设置</legend>
           <el-form-item label="交易策略">
-            <el-radio-group v-model="form.resource">
+            <el-radio-group v-model="form.transactionStrategy">
               <el-radio label="默认方式" />
               <el-radio label="迭代双拍卖" />
             </el-radio-group>
           </el-form-item>
           <el-form-item label="步长设置">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.step" />
           </el-form-item>
         </fieldset>
         <el-form-item>
@@ -58,14 +61,18 @@ export default {
   data() {
     return {
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        id: null,
+        batteryCapacity: null,
+        electricVehicleNumber: null,
+        chargingEfficiency: null,
+        powerConsumptionPerKilometer: null,
+        chargingSpeed: null,
+        chargingStationNumber: null,
+        chargingPileNumber: null,
+        parkingSpaceNumber: null,
+        transactionStrategy: null,
+        step: null,
+        remark: null
       }
     }
   },
