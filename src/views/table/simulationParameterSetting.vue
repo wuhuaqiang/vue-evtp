@@ -3,7 +3,7 @@
     <el-col :span="6"><div class="grid-content" /></el-col>
     <el-col :span="12">
       <el-form ref="form" :inline="true" :model="form" label-width="120px">
-        <fieldset disabled>
+        <fieldset>
           <legend>电动汽车参数设置</legend>
           <el-form-item label="电动汽车数量">
             <el-input v-model="form.electricVehicleNumber" />
@@ -21,7 +21,7 @@
             <el-input v-model="form.powerConsumptionPerKilometer" />
           </el-form-item>
         </fieldset>
-        <fieldset disabled>
+        <fieldset>
           <legend>充电站参数设置</legend>
           <el-form-item label="充电站数量">
             <el-input v-model="form.chargingStationNumber" />
@@ -33,7 +33,7 @@
             <el-input v-model="form.parkingSpaceNumber" />
           </el-form-item>
         </fieldset>
-        <fieldset disabled>
+        <fieldset>
           <legend>仿真策略设置</legend>
           <el-form-item label="交易策略">
             <el-radio-group v-model="form.transactionStrategy">
