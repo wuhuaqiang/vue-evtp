@@ -43,6 +43,9 @@
             <!--</el-menu-item>-->
             <!--</el-menu>-->
             <!--</bm-control>-->
+            <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="point-ctr">
+              <el-button size="mini" type="primary" icon="el-icon-search" class="point-btn" @click="getPoints">获取点位</el-button>
+            </bm-control>
             <bm-copyright
               anchor="BMAP_ANCHOR_TOP_RIGHT"
               :copyright="[{id: 1, content: 'Copyright Message', bounds: {ne: {lng: 110, lat: 40}, sw:{lng: 0, lat: 0}}}, {id: 2, content: '<a>电量交易系统专用地图</a>'}]"
@@ -108,8 +111,9 @@
 // import { connectionSocket, disconnectSocket } from '@/utils/websocket'
 import axios from 'axios'
 import { getAllListWithLine } from '@/api/electricVehicle'
-import { save } from '@/api/evtpPoints'
+import { save, delAll } from '@/api/evtpPoints'
 import { list } from '@/api/chargingStation'
+import { list as pointTypeList } from '@/api/evtpPointsType'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
 import echarts from 'echarts'
@@ -123,6 +127,8 @@ export default {
       downColor: '#ec0000',
       BMap: '',
       map: '',
+      v_TMap: {},
+      v_kMap: {},
       timer: '',
       carIcon: {
         url: 'http://10.168.1.125:8088/api/images/car_normal.png',
@@ -278,6 +284,30 @@ export default {
         volumes: volumes
       }
     },
+    getPoints() {
+      this.ResultArray = []
+      delAll().then(() => {
+        pointTypeList().then(response => {
+          // console.log(response)
+          const kVs = response.data
+          const centerPoint = new this.BMap.Point(104.07, 30.67)
+          const r = 5000
+          kVs.map(obj => {
+            // console.log(this.v_TMap)
+            // console.log(this.v_kMap)
+            // debugger
+            this.v_TMap[obj.value] = obj.remark
+            this.v_kMap[obj.value] = obj.num
+            // console.log(obj)
+            // debugger
+            // console.log('**********************************')
+            this.savePoints(obj.num, obj.value, obj.remark, centerPoint, r)
+            // console.log('**********************************')
+            // this.sleep(6000)
+          })
+        })
+      })
+    },
     /**
      * @param key 编号
      * @param value 关键字
@@ -287,10 +317,13 @@ export default {
      */
     savePoints(key, value, type, centerPoint, r) {
       const this_ = this
-      this_.ResultArray.clear
+      // console.log('执行****')
+      // debugger
       const options = {
         pageCapacity: 50,
         onSearchComplete: function(results) {
+          // console.log(results)
+          const keyword = results.keyword
           // 需要获取当前搜索总共有多少条结果
           const totalResults = results.getNumPois()
           if (!totalResults) {
@@ -299,31 +332,34 @@ export default {
           // 需要获取当前搜索总共有多少条结果
           var totalPages = results.getNumPages()
           var currPage = results.getPageIndex()// 获取当前是第几页数据
-          const ResultArray = []
+          // const ResultArray = []
+          this_.savePointsUtil(results.Ar, keyword)
           if (currPage < totalPages - 1) {
-            this_.ResultArray.push(...results.Ar)
+            // this_.ResultArray.push(...results.Ar)
             local.gotoPage(currPage + 1)
-            console.log(ResultArray)
-          } else {
-            this_.ResultArray.push(...results.Ar)
+            // console.log(ResultArray)
+          // } else {
+            // this_.savePointsUtil(results.Ar,keyword)
+            // this_.ResultArray.push(...results.Ar)
             // map.clearOverlays()
-            for (const store of this_.ResultArray) {
-              const obj = {}
-              obj.id = store.uid
-              obj.lat = store.point.lat
-              obj.lng = store.point.lng
-              obj.title = store.title
-              obj.address = store.address
-              // obj.remark = '家'
-              // obj.type = 0
-              obj.remark = type
-              obj.type = key
-              save(JSON.stringify(obj)).then(response => {
-                console.log(response)
-              })
-              const marker = new this_.BMap.Marker(store.point)
-              this_.map.addOverlay(marker)
-            }
+            // for (const store of this_.ResultArray) {
+            //   const obj = {}
+            //   obj.id = store.uid
+            //   obj.lat = store.point.lat
+            //   obj.lng = store.point.lng
+            //   obj.title = store.title
+            //   obj.address = store.address
+            //   // obj.remark = '家'
+            //   // obj.type = 0
+            //   obj.remark = type
+            //   obj.type = key
+            //   save(JSON.stringify(obj)).then(response => {
+            //     console.log(response)
+            //   })
+            //   // const marker = new this_.BMap.Marker(store.point)
+            //   // this_.map.addOverlay(marker)
+            //   this_.ResultArray = []
+            // }
           }
         }
       }
@@ -335,6 +371,30 @@ export default {
       // local.searchNearby('小区/楼盘', mPoint, 5000)
       // local.searchNearby('公司', mPoint, 5000)
       // local.searchNearby('写字楼', mPoint, 5000)
+    },
+    savePointsUtil(arr, keyword) {
+      console.log('*********************************')
+      console.log(keyword)
+      console.log(arr)
+      console.log('*********************************')
+      for (const store of arr) {
+        const obj = {}
+        obj.id = store.uid
+        obj.lat = store.point.lat
+        obj.lng = store.point.lng
+        obj.title = store.title
+        obj.address = store.address
+        // obj.remark = '家'
+        // obj.type = 0
+        obj.remark = this.v_TMap[keyword]
+        obj.type = this.v_kMap[keyword]
+        console.log(JSON.stringify(obj))
+        save(JSON.stringify(obj)).then(response => {
+          // console.log(response)
+        })
+        // const marker = new this_.BMap.Marker(store.point)
+        // this_.map.addOverlay(marker)
+      }
     },
     calculateMA(dayCount, data) {
       var result = []
@@ -1289,6 +1349,18 @@ export default {
       // }
       // console.log(this.tElectricVehiclePoints)
     },
+    sleep(numberMillis) {
+      let now = new Date()
+      const exitTime = now.getTime() + numberMillis
+      let flag = true
+      while (flag) {
+        flag = true
+        now = new Date()
+        if (now.getTime() > exitTime) {
+          return
+        }
+      }
+    },
     drawBoundary(BMap, map) {
       const this_ = this
       /* var p1 = new BMap.Point(104.130648, 30.57432)
@@ -1447,5 +1519,14 @@ export default {
   }
   .right-container{
 
+  }
+  .point-ctr {
+    position: absolute;
+    z-index: 10;
+    text-size-adjust: none;
+    bottom: auto;
+    right: auto;
+    top: 10px !important;
+    left: 150px !important;
   }
 </style>

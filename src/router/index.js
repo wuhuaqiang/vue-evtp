@@ -155,6 +155,12 @@ export const asyncRoutes = [
         component: () => import('@/views/table/fabric-config'),
         name: 'simulationResultsAnalysis',
         meta: { title: '模拟结果分析' }
+      },
+      {
+        path: 'points-type-msg',
+        component: () => import('@/views/table/points-type-msg'),
+        name: 'pointsTypeMsg',
+        meta: { title: '点类型管理' }
       }
     ]
   },
