@@ -103,7 +103,10 @@ const nameTypeOptions = [
   { key: '游', value: '游' },
   { key: '银行', value: '银行' },
   { key: '购物', value: '购物' },
-  { key: '生活服务', value: '生活服务' }
+  { key: '生活服务', value: '生活服务' },
+  { key: '充电站', value: '充电站' },
+  { key: '公司', value: '公司' },
+  { key: '家', value: '家' }
 ]
 export default {
   name: 'EvtpPointsType',
