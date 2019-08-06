@@ -1,9 +1,10 @@
 import request from '@/utils/request-ws'
 
-export function list(query) {
+export function initMap(query) {
   return request({
-    url: '/evtpChargingStation/list',
+    url: '/evtpInitMap/initMap',
     method: 'get',
     params: query
   })
 }
+

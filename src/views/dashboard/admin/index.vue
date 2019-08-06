@@ -44,7 +44,10 @@
             <!--</el-menu>-->
             <!--</bm-control>-->
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="point-ctr">
-              <el-button size="mini" type="primary" icon="el-icon-search" class="point-btn" @click="getPoints">获取点位</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-search" class="point-btn" @click="getPoints">初始化点位</el-button>
+            </bm-control>
+            <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="marker-ctr">
+              <el-button size="mini" type="primary" icon="el-icon-search" class="marker-btn" @click="initMapMarker">初始化覆盖物</el-button>
             </bm-control>
             <bm-copyright
               anchor="BMAP_ANCHOR_TOP_RIGHT"
@@ -58,6 +61,7 @@
               :position="item.point"
               :dragging="true"
               :icon="carIcon"
+              :title="item.title"
             />
             <bm-marker
               v-for="(item,key) in tChargingStations"
@@ -66,6 +70,7 @@
               :position="item.point"
               :dragging="true"
               :icon="stationIcon"
+              :title="item.title"
             />
             <!--<bm-driving
               start="{lng: 104.130648, lat: 30.57432}"
@@ -110,10 +115,12 @@
 <script>
 // import { connectionSocket, disconnectSocket } from '@/utils/websocket'
 import axios from 'axios'
-import { getAllListWithLine } from '@/api/electricVehicle'
+// import { getAllListWithLine } from '@/api/electricVehicle'
 import { save, delAll } from '@/api/evtpPoints'
 import { list } from '@/api/chargingStation'
+import { queryUserList } from '@/api/evtpUser'
 import { list as pointTypeList } from '@/api/evtpPointsType'
+import { initMap } from '@/api/evtpMap'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
 import echarts from 'echarts'
@@ -283,6 +290,20 @@ export default {
         values: values,
         volumes: volumes
       }
+    },
+    initMapMarker() {
+      initMap().then((response) => {
+        if (response.code === 200) {
+          this.tElectricVehiclePoints = []
+          this.tChargingStations = []
+          this.getAllElectricVehicles()
+          this.getAllTChargingStation()
+          this.$message({
+            message: '初始化成功',
+            type: 'success'
+          })
+        }
+      })
     },
     getPoints() {
       this.ResultArray = []
@@ -1280,24 +1301,25 @@ export default {
       this.polygonPath.push({ lng: 116.404, lat: 39.915 })
     },
     getAllElectricVehicles() {
-      getAllListWithLine().then(response => {
+      queryUserList().then(response => {
         if (response.code === 200) {
           const tElectricVehicles = response.data
           for (const item of tElectricVehicles) {
             // console.log(item)
             const positionArr = item.positionVal.split(',')
             const point = {
-              lng: parseFloat(positionArr[0]),
-              lat: parseFloat(positionArr[1])
+              lng: parseFloat(positionArr[1]),
+              lat: parseFloat(positionArr[0])
             }
             const marker = {
               id: item.id,
-              userId: item.userId,
+              evId: item.evId,
               point: point,
-              label: {
-                content: item.userName,
-                opts: { offset: { width: 20, height: 0 }, position: point, enableMassClear: true }
-              }
+              title: item.name
+              // label: {
+              //   content: item.name,
+              //   opts: { offset: { width: 20, height: 0 }, position: point, enableMassClear: true }
+              // }
             }
             this.tElectricVehiclePoints.push(marker)
           }
@@ -1315,17 +1337,18 @@ export default {
             // console.log(item)
             const positionArr = item.positionVal.split(',')
             const point = {
-              lng: parseFloat(positionArr[0]),
-              lat: parseFloat(positionArr[1])
+              lng: parseFloat(positionArr[1]),
+              lat: parseFloat(positionArr[0])
             }
             const marker = {
               id: item.id,
               // userId: item.userId,
               point: point,
-              label: {
-                content: item.name,
-                opts: { offset: { width: 30, height: 0 }, position: point, enableMassClear: true }
-              }
+              title: item.name
+              // label: {
+              //   content: item.name,
+              //   opts: { offset: { width: 30, height: 0 }, position: point, enableMassClear: true }
+              // }
             }
             this.tChargingStations.push(marker)
           }
@@ -1528,5 +1551,14 @@ export default {
     right: auto;
     top: 10px !important;
     left: 150px !important;
+  }
+  .marker-ctr {
+    position: absolute;
+    z-index: 10;
+    text-size-adjust: none;
+    bottom: auto;
+    right: auto;
+    top: 10px !important;
+    left: 300px !important;
   }
 </style>

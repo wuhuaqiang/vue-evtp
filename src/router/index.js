@@ -161,6 +161,12 @@ export const asyncRoutes = [
         component: () => import('@/views/table/points-type-msg'),
         name: 'pointsTypeMsg',
         meta: { title: '点类型管理' }
+      },
+      {
+        path: 'evtp-user-msg',
+        component: () => import('@/views/table/evtp-user-msg'),
+        name: 'evtpUserMsg',
+        meta: { title: '电动汽车用户管理' }
       }
     ]
   },
