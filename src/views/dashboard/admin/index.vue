@@ -116,11 +116,12 @@
 // import { connectionSocket, disconnectSocket } from '@/utils/websocket'
 import axios from 'axios'
 // import { getAllListWithLine } from '@/api/electricVehicle'
-import { save, delAll } from '@/api/evtpPoints'
+import { save, delAll, getOneById } from '@/api/evtpPoints'
 import { list } from '@/api/chargingStation'
 import { queryUserList } from '@/api/evtpUser'
 import { list as pointTypeList } from '@/api/evtpPointsType'
 import { initMap } from '@/api/evtpMap'
+import { goToWork } from '@/utils/evtpUserUtil'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
 import echarts from 'echarts'
@@ -180,7 +181,7 @@ export default {
     console.log(this)
     // console.log(this)
     setInterval(this.moveStep, 1000)
-    this.getAllElectricVehicles()
+    this.getAllElectricVehicleDatas()
     this.getAllTChargingStation()
     // 建立连接对象
     const socket = new SockJS('/ws/queueServer')
@@ -215,20 +216,27 @@ export default {
       this.websocket.onmessage = (event) => {
         // debugger
         const obj = JSON.parse(event.data)
+        console.log(obj)
+        // console.log(this.tElectricVehiclePoints)
         // this.tElectricVehiclePoints = obj
         for (const item of this.tElectricVehiclePoints) {
           for (const o of obj) {
-            if (item.id === o.carId) {
+            if (item.id === o.id) {
               console.log(item.point)
-              console.log(o.mapPoint)
-              item.point = o.mapPoint
+              console.log(obj.positionVal)
+              item.point = o.point
             }
           }
+          // if (item.id === obj.id) {
+          //   console.log(item.point)
+          //   console.log(obj.positionVal)
+          //   item.point = obj.point
+          // }
           // if (item.id === obj.carId) {
           //   item.point = obj.mapPoint
           // }
         }
-        console.log(JSON.parse(event.data))
+        // console.log(JSON.parse(event.data))
       }
       // 连接关闭的回调方法
       this.websocket.onclose = () => {
@@ -1300,13 +1308,39 @@ export default {
     addPolygonPoint() {
       this.polygonPath.push({ lng: 116.404, lat: 39.915 })
     },
+    getAllElectricVehicleDatas() {
+      queryUserList().then(response => {
+        if (response.code === 200) {
+          const tElectricVehicles = response.data
+          for (const item of tElectricVehicles) {
+            const positionArr = item.homePositionVal.split(',')
+            const point = {
+              lng: parseFloat(positionArr[1]),
+              lat: parseFloat(positionArr[0])
+            }
+            const marker = {
+              id: item.id,
+              evId: item.evId,
+              point: point,
+              title: item.name
+              // label: {
+              //   content: item.name,
+              //   opts: { offset: { width: 20, height: 0 }, position: point, enableMassClear: true }
+              // }
+            }
+            this.tElectricVehiclePoints.push(marker)
+          }
+        }
+      })
+    },
     getAllElectricVehicles() {
       queryUserList().then(response => {
         if (response.code === 200) {
           const tElectricVehicles = response.data
           for (const item of tElectricVehicles) {
+            goToWork(this.BMap, this.map, item.homePositionVal, item.companyPositionVal, item.id, '上班', 0)
             // console.log(item)
-            const positionArr = item.positionVal.split(',')
+            const positionArr = item.homePositionVal.split(',')
             const point = {
               lng: parseFloat(positionArr[1]),
               lat: parseFloat(positionArr[0])
@@ -1383,6 +1417,10 @@ export default {
           return
         }
       }
+    },
+    async getPointLatLng(query) {
+      const res = await getOneById(query)
+      return res
     },
     drawBoundary(BMap, map) {
       const this_ = this
