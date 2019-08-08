@@ -2,7 +2,7 @@ import request from '@/utils/request-ws'
 
 export function list(query) {
   return request({
-    url: '/evtpPoints/list',
+    url: '/evtpLine/list',
     method: 'get',
     params: query
   })
@@ -10,27 +10,14 @@ export function list(query) {
 
 export function save(data) {
   return request({
-    url: '/evtpPoints/save',
+    url: '/evtpLine/save',
     method: 'post',
     data
-  })
-}
-export function saveAll(data) {
-  return request({
-    url: '/evtpPoints/saveAll',
-    method: 'post',
-    data
-  })
-}
-export function delAll() {
-  return request({
-    url: '/evtpPoints/delAll',
-    method: 'get'
   })
 }
 export function getOneById(query) {
   return request({
-    url: '/evtpPoints/getOneById',
+    url: '/evtpLine/getOneById',
     method: 'get',
     params: query
   })
