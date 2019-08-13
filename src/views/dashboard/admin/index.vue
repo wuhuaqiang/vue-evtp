@@ -117,6 +117,9 @@
 </template>
 <script>
 // import { connectionSocket, disconnectSocket } from '@/utils/websocket'
+import stationImg from '@/assets/images/chargingStation.png'
+import car_normalImg from '@/assets/images/car_normal.png'
+import car_xycdImg from '@/assets/images/car_xycd.gif'
 import axios from 'axios'
 // import { getAllListWithLine } from '@/api/electricVehicle'
 import { save, delAll, getOneById } from '@/api/evtpPoints'
@@ -142,36 +145,36 @@ export default {
       v_kMap: {},
       timer: '',
       car_normalIcon: {
-        url: 'http://10.168.1.125:8088/api/images/car_normal.png',
+        url: car_normalImg,
         size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
           imageOffset: { width: 0, height: 0 },
           imageSize: { width: 18, height: 18 },
           infoWindowAnchor: { width: 0, height: 0 },
-          printImageUrl: 'http://10.168.1.125:8088/api/images/car_normal.png'
+          printImageUrl: car_normalImg
         }
       },
       car_xycdIcon: {
-        url: 'http://10.168.1.125:8088/api/images/car_xycd.gif',
+        url: car_xycdImg, // http://10.168.1.125:8088/api/images/car_xycd.gif
         size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
           imageOffset: { width: 0, height: 0 },
           imageSize: { width: 18, height: 18 },
           infoWindowAnchor: { width: 0, height: 0 },
-          printImageUrl: 'http://10.168.1.125:8088/api/images/car_xycd.gif'
+          printImageUrl: car_xycdImg
         }
       },
       stationIcon: {
-        url: 'http://10.168.1.125:8088/api/images/chargingStation.png',
+        url: stationImg, // http://10.168.1.125:8088/api/images/chargingStation.png
         size: { width: 40, height: 40 },
         opts: {
           anchor: { width: 0, height: 0 },
           imageOffset: { width: 0, height: 0 },
           imageSize: { width: 40, height: 40 },
           infoWindowAnchor: { width: 0, height: 0 },
-          printImageUrl: 'http://10.168.1.125:8088/api/images/chargingStation.png'
+          printImageUrl: stationImg
         }
       },
       tElectricVehiclePoints: [],
