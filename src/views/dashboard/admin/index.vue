@@ -49,6 +49,9 @@
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="marker-ctr">
               <el-button size="mini" type="primary" icon="el-icon-search" class="marker-btn" @click="initMapMarker">初始化覆盖物</el-button>
             </bm-control>
+            <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="action-ctr">
+              <el-button size="mini" type="primary" icon="el-icon-search" class="action-btn" @click="initAction">模拟</el-button>
+            </bm-control>
             <bm-copyright
               anchor="BMAP_ANCHOR_TOP_RIGHT"
               :copyright="[{id: 1, content: 'Copyright Message', bounds: {ne: {lng: 110, lat: 40}, sw:{lng: 0, lat: 0}}}, {id: 2, content: '<a>电量交易系统专用地图</a>'}]"
@@ -60,7 +63,7 @@
               :label="item.label"
               :position="item.point"
               :dragging="true"
-              :icon="carIcon"
+              :icon="item.carIcon"
               :title="item.title"
             />
             <bm-marker
@@ -120,7 +123,7 @@ import { save, delAll, getOneById } from '@/api/evtpPoints'
 import { list } from '@/api/chargingStation'
 import { queryUserList } from '@/api/evtpUser'
 import { list as pointTypeList } from '@/api/evtpPointsType'
-import { initMap } from '@/api/evtpMap'
+import { initMap, evtpAction } from '@/api/evtpMap'
 import { goToWork } from '@/utils/evtpUserUtil'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
@@ -138,24 +141,35 @@ export default {
       v_TMap: {},
       v_kMap: {},
       timer: '',
-      carIcon: {
+      car_normalIcon: {
         url: 'http://10.168.1.125:8088/api/images/car_normal.png',
-        size: { width: 30, height: 30 },
+        size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
           imageOffset: { width: 0, height: 0 },
-          imageSize: { width: 30, height: 30 },
+          imageSize: { width: 18, height: 18 },
           infoWindowAnchor: { width: 0, height: 0 },
           printImageUrl: 'http://10.168.1.125:8088/api/images/car_normal.png'
         }
       },
-      stationIcon: {
-        url: 'http://10.168.1.125:8088/api/images/chargingStation.png',
-        size: { width: 30, height: 30 },
+      car_xycdIcon: {
+        url: 'http://10.168.1.125:8088/api/images/car_xycd.gif',
+        size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
           imageOffset: { width: 0, height: 0 },
-          imageSize: { width: 30, height: 30 },
+          imageSize: { width: 18, height: 18 },
+          infoWindowAnchor: { width: 0, height: 0 },
+          printImageUrl: 'http://10.168.1.125:8088/api/images/car_xycd.gif'
+        }
+      },
+      stationIcon: {
+        url: 'http://10.168.1.125:8088/api/images/chargingStation.png',
+        size: { width: 40, height: 40 },
+        opts: {
+          anchor: { width: 0, height: 0 },
+          imageOffset: { width: 0, height: 0 },
+          imageSize: { width: 40, height: 40 },
           infoWindowAnchor: { width: 0, height: 0 },
           printImageUrl: 'http://10.168.1.125:8088/api/images/chargingStation.png'
         }
@@ -221,7 +235,9 @@ export default {
         // this.tElectricVehiclePoints = obj
         for (const item of this.tElectricVehiclePoints) {
           for (const o of obj) {
-            if (item.id === o.id) {
+            if (o.remark === '需要充电') {
+              item.carIcon = this.car_xycdIcon
+            } else if (item.id === o.id) {
               console.log(item.point)
               console.log(obj.positionVal)
               item.point = o.point
@@ -306,6 +322,16 @@ export default {
           this.tChargingStations = []
           this.getAllElectricVehicles()
           this.getAllTChargingStation()
+          this.$message({
+            message: '初始化成功',
+            type: 'success'
+          })
+        }
+      })
+    },
+    initAction() {
+      evtpAction().then((response) => {
+        if (response.code === 200) {
           this.$message({
             message: '初始化成功',
             type: 'success'
@@ -1313,7 +1339,7 @@ export default {
         if (response.code === 200) {
           const tElectricVehicles = response.data
           for (const item of tElectricVehicles) {
-            const positionArr = item.homePositionVal.split(',')
+            const positionArr = item.currPositionVal.split(',')
             const point = {
               lng: parseFloat(positionArr[1]),
               lat: parseFloat(positionArr[0])
@@ -1322,7 +1348,8 @@ export default {
               id: item.id,
               evId: item.evId,
               point: point,
-              title: item.name
+              title: item.name,
+              carIcon: this.car_normalIcon
               // label: {
               //   content: item.name,
               //   opts: { offset: { width: 20, height: 0 }, position: point, enableMassClear: true }
@@ -1340,7 +1367,7 @@ export default {
           for (const item of tElectricVehicles) {
             goToWork(this.BMap, this.map, item.homePositionVal, item.companyPositionVal, item.id, '上班', 0)
             // console.log(item)
-            const positionArr = item.homePositionVal.split(',')
+            const positionArr = item.currPositionVal.split(',')
             const point = {
               lng: parseFloat(positionArr[1]),
               lat: parseFloat(positionArr[0])
@@ -1349,7 +1376,8 @@ export default {
               id: item.id,
               evId: item.evId,
               point: point,
-              title: item.name
+              title: item.name,
+              carIcon: this.car_normalIcon
               // label: {
               //   content: item.name,
               //   opts: { offset: { width: 20, height: 0 }, position: point, enableMassClear: true }
@@ -1598,5 +1626,14 @@ export default {
     right: auto;
     top: 10px !important;
     left: 300px !important;
+  }
+  .action-ctr {
+    position: absolute;
+    z-index: 10;
+    text-size-adjust: none;
+    bottom: auto;
+    right: auto;
+    top: 10px !important;
+    left: 450px !important;
   }
 </style>

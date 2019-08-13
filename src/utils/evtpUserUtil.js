@@ -34,13 +34,16 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     const time = plan.getDuration(true)// 获取时间
     const distance = plan.getDistance(true)// 获取距离
     console.log(getMillisecond(time))
-    const date_T = getMillisecond(time)
+    console.log(distance)
+    const data_T = getMillisecond(time)
+    const data_D = parseFloat(distance)
+    console.log(data_D)
     const date = new Date()
     const fullYear = date.getFullYear() // 获取完整的年份(4位,1970)
     const month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
     const date1 = date.getDate() // 获取当前日(1-31)
-    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 17:30')).getTime()
-    const newDate = new Date(oldTime - date_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
+    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 16:30')).getTime()
+    const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
     console.log(oldTime)
     console.log(newDate)
     const m = randomNum(0, 60 * 60 * 1000)
@@ -62,9 +65,10 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     param.endTime = endTime
     param.owerId = owerId
     param.sort = 1
-    param.runTime = date_T
+    param.runTime = data_T
     param.remark = remark
     param.state = 0
+    param.distance = data_D
     saveLine(param).then(response => {
       console.log(response)
     })

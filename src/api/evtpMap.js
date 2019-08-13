@@ -7,4 +7,11 @@ export function initMap(query) {
     params: query
   })
 }
+export function evtpAction(query) {
+  return request({
+    url: '/evtpAction/goToWork',
+    method: 'get',
+    params: query
+  })
+}
 
