@@ -127,7 +127,8 @@ import { list } from '@/api/chargingStation'
 import { queryUserList } from '@/api/evtpUser'
 import { list as pointTypeList } from '@/api/evtpPointsType'
 import { initMap, evtpAction } from '@/api/evtpMap'
-import { goToWork } from '@/utils/evtpUserUtil'
+import { goToWork, goToCharging } from '@/utils/evtpUserUtil'
+import { Queue } from '@/utils/queue'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
 import echarts from 'echarts'
@@ -141,8 +142,11 @@ export default {
       downColor: '#ec0000',
       BMap: '',
       map: '',
+      minTime: 0,
       v_TMap: {},
       v_kMap: {},
+      timeArr: [],
+      chargingMatchQueue: new Queue(),
       timer: '',
       car_normalIcon: {
         url: car_normalImg,
@@ -196,6 +200,7 @@ export default {
   },
   created() {
     console.log(this)
+    // console.log(this.chargingMatchQueue)
     // console.log(this)
     setInterval(this.moveStep, 1000)
     this.getAllElectricVehicleDatas()
@@ -233,8 +238,8 @@ export default {
       this.websocket.onmessage = (event) => {
         // debugger
         const obj = JSON.parse(event.data)
-        console.log(obj)
-        console.log(this.tElectricVehiclePoints)
+        // console.log(obj)
+        // console.log(this.tElectricVehiclePoints)
         // console.log(this.tElectricVehiclePoints)
         // this.tElectricVehiclePoints = obj
         for (const item of this.tElectricVehiclePoints) {
@@ -242,9 +247,11 @@ export default {
             if (item.id === o.id) {
               if (o.remark === '需要充电') {
                 item.carIcon = this.car_xycdIcon
+                const nearestChargingStation = this.nearestChargingStation(item, this.tChargingStations)
+                console.log(nearestChargingStation)
               } else {
-                console.log(item.point)
-                console.log(obj.positionVal)
+                // console.log(item.point)
+                // console.log(obj.positionVal)
                 item.point = o.point
               }
             }
@@ -258,7 +265,7 @@ export default {
           //   item.point = obj.mapPoint
           // }
         }
-        console.log(this.tElectricVehiclePoints)
+        // console.log(this.tElectricVehiclePoints)
         // console.log(JSON.parse(event.data))
       }
       // 连接关闭的回调方法
@@ -306,32 +313,53 @@ export default {
       this.BMap = BMap
       this.map = map
     },
-    nearestChargingStation(Car, ChargingStations) {
-      const carPoint = new this.BMap.Point(Car.lng, Car.lat)
-      const result = []
-      let k = -1
-      for (let i = 0; i < ChargingStations.length; i++) {
-        const stationPoint = new this.BMap.Point(ChargingStations[i].lng, ChargingStations[i].lat)
+    nearestChargingStation(car, chargingStations) {
+      // console.log(chargingStations[0])
+      const carPoint = new this.BMap.Point(car.point.lng, car.point.lat)
+      for (let i = 0; i < chargingStations.length; i++) {
+        const stationPoint = new this.BMap.Point(chargingStations[i].point.lng, chargingStations[i].point.lat)
         const searchComplete = (results) => {
           if (transit.getStatus() !== 0) {
             return
           }
           const plan = results.getPlan(0)
-          result[i] = plan.getDuration(true)
+          const duration = plan.getDuration(true)
+          let newMin = 0
+          let newHour = 0
+          if (duration.indexOf('小时') === -1) {
+            newMin = parseInt(duration)
+          } else if (duration.indexOf('分钟') === -1) {
+            newHour = parseInt(duration.substring(0, duration.indexOf('小时')))
+          } else {
+            newHour = parseInt(duration.substring(0, duration.indexOf('小时')))
+            newMin = parseInt(duration.substring(duration.indexOf('小时') + 2, duration.indexOf('分钟')))
+          }
+          const currTimeLong = (newHour * 60 + newMin) * 60 * 1000
+          this.timeArr.push(currTimeLong)
+          console.log(this.timeArr)
+          if (this.timeArr.length === chargingStations.length) {
+            let minTime = this.timeArr[0]
+            let index = 0
+            for (let j = 0; j < this.timeArr.length; j++) {
+              if (this.timeArr[j] < minTime) {
+                minTime = this.timeArr[j]
+                index = j
+              }
+            }
+            const obj = {
+              car: car,
+              minTime: minTime,
+              chargingStation: chargingStations[index]
+            }
+            goToCharging(this.BMap, this.map, car.point, chargingStations[index].point, car.id, '充电', 0)
+            this.chargingMatchQueue.enqueue(obj)
+            this.timeArr = []
+            console.log(this.chargingMatchQueue)
+            console.log(this.timeArr)
+          }
         }
         const transit = new this.BMap.DrivingRoute(this.map, { onSearchComplete: searchComplete })
         transit.search(carPoint, stationPoint)
-      }
-      let min = result[0]
-      for (let i = 0; i < result.length; i++) {
-        if (result[i] < min) {
-          min = result[i]
-          k = i
-        }
-      }
-      return {
-        Car: Car,
-        ChargingStations: ChargingStations[k]
       }
     },
     splitData(rawData) {
@@ -1374,6 +1402,7 @@ export default {
         if (response.code === 200) {
           const tElectricVehicles = response.data
           for (const item of tElectricVehicles) {
+            console.log(item)
             const positionArr = item.currPositionVal.split(',')
             const point = {
               lng: parseFloat(positionArr[1]),
@@ -1389,6 +1418,9 @@ export default {
               //   content: item.name,
               //   opts: { offset: { width: 20, height: 0 }, position: point, enableMassClear: true }
               // }
+            }
+            if (item.current_power < 4) {
+              marker.carIcon = this.car_xycdIcon
             }
             this.tElectricVehiclePoints.push(marker)
           }
