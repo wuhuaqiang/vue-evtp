@@ -234,16 +234,19 @@ export default {
         // debugger
         const obj = JSON.parse(event.data)
         console.log(obj)
+        console.log(this.tElectricVehiclePoints)
         // console.log(this.tElectricVehiclePoints)
         // this.tElectricVehiclePoints = obj
         for (const item of this.tElectricVehiclePoints) {
           for (const o of obj) {
-            if (o.remark === '需要充电') {
-              item.carIcon = this.car_xycdIcon
-            } else if (item.id === o.id) {
-              console.log(item.point)
-              console.log(obj.positionVal)
-              item.point = o.point
+            if (item.id === o.id) {
+              if (o.remark === '需要充电') {
+                item.carIcon = this.car_xycdIcon
+              } else {
+                console.log(item.point)
+                console.log(obj.positionVal)
+                item.point = o.point
+              }
             }
           }
           // if (item.id === obj.id) {
@@ -255,6 +258,7 @@ export default {
           //   item.point = obj.mapPoint
           // }
         }
+        console.log(this.tElectricVehiclePoints)
         // console.log(JSON.parse(event.data))
       }
       // 连接关闭的回调方法
