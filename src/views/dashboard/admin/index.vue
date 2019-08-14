@@ -306,6 +306,34 @@ export default {
       this.BMap = BMap
       this.map = map
     },
+    nearestChargingStation(Car, ChargingStations) {
+      const carPoint = new this.BMap.Point(Car.lng, Car.lat)
+      const result = []
+      let k = -1
+      for (let i = 0; i < ChargingStations.length; i++) {
+        const stationPoint = new this.BMap.Point(ChargingStations[i].lng, ChargingStations[i].lat)
+        const searchComplete = (results) => {
+          if (transit.getStatus() !== 0) {
+            return
+          }
+          const plan = results.getPlan(0)
+          result[i] = plan.getDuration(true)
+        }
+        const transit = new this.BMap.DrivingRoute(this.map, { onSearchComplete: searchComplete })
+        transit.search(carPoint, stationPoint)
+      }
+      let min = result[0]
+      for (let i = 0; i < result.length; i++) {
+        if (result[i] < min) {
+          min = result[i]
+          k = i
+        }
+      }
+      return {
+        Car: Car,
+        ChargingStations: ChargingStations[k]
+      }
+    },
     splitData(rawData) {
       var categoryData = []
       var values = []
