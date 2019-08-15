@@ -11,6 +11,15 @@ export function getMillisecond(time) {
   }
   return (newHour * 60 + newMin) * 60 * 1000
 }
+export function getDistanceKm(distance) {
+  let newDistance = 0
+  if (distance.indexOf('米') === -1) {
+    newDistance = parseFloat(distance)
+  } else {
+    newDistance = parseFloat(distance) / 1000
+  }
+  return newDistance
+}
 
 export function formatDate(date, format) {
   if (!format) format = 'yyyy-MM-dd HH:mm:ss'

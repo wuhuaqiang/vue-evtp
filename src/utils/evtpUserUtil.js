@@ -1,4 +1,4 @@
-import { getMillisecond, formatDate, randomNum, uuid } from '@/utils/utils'
+import { getDistanceKm, getMillisecond, formatDate, randomNum, uuid } from '@/utils/utils'
 import { save as saveLine } from '@/api/evtpLines'
 import { saveAll as saveLineAllPoint } from '@/api/evtpLinePoints'
 export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, type) {
@@ -36,7 +36,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     console.log(getMillisecond(time))
     console.log(distance)
     const data_T = getMillisecond(time)
-    const data_D = parseFloat(distance)
+    const data_D = getDistanceKm(distance)
     console.log(data_D)
     const date = new Date()
     const fullYear = date.getFullYear() // 获取完整的年份(4位,1970)
@@ -51,9 +51,9 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     // const startTime = formatDate(oldTime - date_T - m)
     const startTime = formatDate(oldTime)
     const endTime = formatDate(oldTime - m)
-    console.log()
-    console.log()
-    console.log(uuid(32))
+    // console.log()
+    // console.log()
+    // console.log(uuid(32))
     const param = {}
     param.id = uuid(32)
     param.name = remark
@@ -74,8 +74,8 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     })
     const params = []
     zr.map((obj, index) => {
-      console.log(index)
-      console.log(obj)
+      // console.log(index)
+      // console.log(obj)
       const parms = {}
       parms.id = uuid(32)
       parms.lat = obj.lat
@@ -138,7 +138,7 @@ export function goToCharging(BMap, map, startPoint, endPoint, owerId, remark, ty
     const time = plan.getDuration(true)// 获取时间
     const distance = plan.getDistance(true)// 获取距离
     const data_T = getMillisecond(time)
-    const data_D = parseFloat(distance)
+    const data_D = getDistanceKm(distance)
     const date = new Date()
     const m = randomNum(0, 60 * 60 * 1000)
     // console.log(m)
