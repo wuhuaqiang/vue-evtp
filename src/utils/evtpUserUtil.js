@@ -42,7 +42,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     const fullYear = date.getFullYear() // 获取完整的年份(4位,1970)
     const month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
     const date1 = date.getDate() // 获取当前日(1-31)
-    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 09:30')).getTime()
+    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 10:50')).getTime()
     const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
     console.log(oldTime)
     console.log(newDate)
@@ -145,16 +145,16 @@ export function goToCharging(BMap, map, startPoint, endPoint, owerId, remark, ty
     // const startTime = formatDate(oldTime - date_T - m)
     const startTime = formatDate(date.getTime() + m)
     const endTime = formatDate(date.getTime() + data_T + m)
-    console.log()
-    console.log()
-    console.log(uuid(32))
+    // console.log()
+    // console.log()
+    // console.log(uuid(32))
     const param = {}
     param.id = uuid(32)
     param.name = remark
     param.startPoint = startPosition
     param.endPoint = endPosition
-    param.startPointVal = startPoint.lng + ',' + startPoint.lat
-    param.endPointVal = endPoint.lng + ',' + endPoint.lat
+    param.startPointVal = startPoint.lat + ',' + startPoint.lng
+    param.endPointVal = endPoint.lat + ',' + endPoint.lng
     param.startTime = startTime
     param.endTime = endTime
     param.owerId = owerId

@@ -146,6 +146,7 @@ export default {
       v_TMap: {},
       v_kMap: {},
       timeArr: [],
+      chargingStationArr: [],
       chargingMatchQueue: new Queue(),
       timer: '',
       car_normalIcon: {
@@ -336,26 +337,45 @@ export default {
           }
           const currTimeLong = (newHour * 60 + newMin) * 60 * 1000
           this.timeArr.push(currTimeLong)
-          console.log(this.timeArr)
+          this.chargingStationArr.push(chargingStations[i])
+          console.log('*****************************')
+          console.log(currTimeLong)
+          console.log('*****************************')
+          console.log(car)
+          console.log('*****************************')
+          console.log(chargingStations[i])
+          console.log('*****************************')
+          // console.log(this.timeArr)
           if (this.timeArr.length === chargingStations.length) {
             let minTime = this.timeArr[0]
             let index = 0
+            let obj = null
             for (let j = 0; j < this.timeArr.length; j++) {
               if (this.timeArr[j] < minTime) {
                 minTime = this.timeArr[j]
+                obj = this.chargingStationArr[j]
                 index = j
               }
             }
-            const obj = {
-              car: car,
-              minTime: minTime,
-              chargingStation: chargingStations[index]
-            }
-            goToCharging(this.BMap, this.map, car.point, chargingStations[index].point, car.id, '充电', 0)
-            this.chargingMatchQueue.enqueue(obj)
+            // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx')
+            // // console.log(index)
+            // console.log(chargingStations)
+            // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx')
+            // const obj = {
+            //   car: car,
+            //   minTime: minTime,
+            //   chargingStation: chargingStations[index]
+            // }
+            console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            console.log(this.chargingStationArr[index])
+            console.log(obj)
+            console.log('--------------------------------------------')
+            goToCharging(this.BMap, this.map, car.point, obj.point, car.id, '充电', 0)
+            // this.chargingMatchQueue.enqueue(obj)
             this.timeArr = []
-            console.log(this.chargingMatchQueue)
-            console.log(this.timeArr)
+            this.chargingStationArr = []
+            // console.log(this.chargingMatchQueue)
+            // console.log(this.timeArr)
           }
         }
         const transit = new this.BMap.DrivingRoute(this.map, { onSearchComplete: searchComplete })
