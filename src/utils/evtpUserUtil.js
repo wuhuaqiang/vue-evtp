@@ -19,12 +19,12 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     const addComp = rs.addressComponents
     companyPosition = addComp.district + addComp.street + addComp.streetNumber
   })
-  console.log(homePositionArr)
-  console.log(companyPositionArr)
+  // console.log(homePositionArr)
+  // console.log(companyPositionArr)
   const searchComplete = (results) => {
-    console.log(owerId)
-    console.log(homePosition)
-    console.log(companyPosition)
+    // console.log(owerId)
+    // console.log(homePosition)
+    // console.log(companyPosition)
     const zr = results.xr[0].dk[0].zr
     // console.log(transit.getStatus())
     if (transit.getStatus() !== 0) {
@@ -33,21 +33,21 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     const plan = results.getPlan(0)
     const time = plan.getDuration(true)// 获取时间
     const distance = plan.getDistance(true)// 获取距离
-    console.log(getMillisecond(time))
-    console.log(distance)
+    // console.log(getMillisecond(time))
+    // console.log(distance)
     const data_T = getMillisecond(time)
     const data_D = getDistanceKm(distance)
-    console.log(data_D)
+    // console.log(data_D)
     const date = new Date()
     const fullYear = date.getFullYear() // 获取完整的年份(4位,1970)
     const month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
     const date1 = date.getDate() // 获取当前日(1-31)
-    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 10:50')).getTime()
-    const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
-    console.log(oldTime)
-    console.log(newDate)
+    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 11:03')).getTime()
+    // const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
+    // console.log(oldTime)
+    // console.log(newDate)
     const m = randomNum(0, 60 * 60 * 1000)
-    console.log(m)
+    // console.log(m)
     // const startTime = formatDate(oldTime - date_T - m)
     const startTime = formatDate(oldTime)
     const endTime = formatDate(oldTime - m)
@@ -70,7 +70,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     param.state = 0
     param.distance = data_D
     saveLine(param).then(response => {
-      console.log(response)
+      // console.log(response)
     })
     const params = []
     zr.map((obj, index) => {
@@ -92,12 +92,12 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
       // })
     })
     saveLineAllPoint(JSON.stringify(params)).then(response => {
-      console.log(response)
+      // console.log(response)
     })
     // console.log(duration)
     // console.log(Bmap.startTime)
-    console.log(param)
-    console.log(time + distance)
+    // console.log(param)
+    // console.log(time + distance)
   }
   const transit = new BMap.DrivingRoute(map, {
     // renderOptions: { map: map },
@@ -164,12 +164,12 @@ export function goToCharging(BMap, map, startPoint, endPoint, owerId, remark, ty
     param.state = 0
     param.distance = data_D
     saveLine(param).then(response => {
-      console.log(response)
+      // console.log(response)
     })
     const params = []
     zr.map((obj, index) => {
-      console.log(index)
-      console.log(obj)
+      // console.log(index)
+      // console.log(obj)
       const parms = {}
       parms.id = uuid(32)
       parms.lat = obj.lat
@@ -186,12 +186,12 @@ export function goToCharging(BMap, map, startPoint, endPoint, owerId, remark, ty
       // })
     })
     saveLineAllPoint(JSON.stringify(params)).then(response => {
-      console.log(response)
+      // console.log(response)
     })
     // console.log(duration)
     // console.log(Bmap.startTime)
-    console.log(param)
-    console.log(time + distance)
+    // console.log(param)
+    // console.log(time + distance)
   }
   const transit = new BMap.DrivingRoute(map, {
     // renderOptions: { map: map },

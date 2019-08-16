@@ -248,12 +248,14 @@ export default {
             if (item.id === o.id) {
               if (o.remark === '需要充电') {
                 item.carIcon = this.car_xycdIcon
-                const nearestChargingStation = this.nearestChargingStation(item, this.tChargingStations)
-                console.log(nearestChargingStation)
+                goToCharging(this.BMap, this.map, o.evPoint, o.csPoint, o.id, '充电', 0)
+                // this.chargingMatchQueue.enqueue(item)
+                // const nearestChargingStation = this.nearestChargingStation(item, this.tChargingStations)
+                // console.log(nearestChargingStation)
               } else {
                 // console.log(item.point)
                 // console.log(obj.positionVal)
-                item.point = o.point
+                item.point = o.evPoint
               }
             }
           }
@@ -315,10 +317,13 @@ export default {
       this.map = map
     },
     nearestChargingStation(car, chargingStations) {
+      console.log(car)
+      this.chargingMatchQueue.enqueue(car)
       // console.log(chargingStations[0])
       const carPoint = new this.BMap.Point(car.point.lng, car.point.lat)
       for (let i = 0; i < chargingStations.length; i++) {
         const stationPoint = new this.BMap.Point(chargingStations[i].point.lng, chargingStations[i].point.lat)
+        // this.chargingStationArr.push(chargingStations[i])
         const searchComplete = (results) => {
           if (transit.getStatus() !== 0) {
             return
@@ -337,26 +342,39 @@ export default {
           }
           const currTimeLong = (newHour * 60 + newMin) * 60 * 1000
           this.timeArr.push(currTimeLong)
-          this.chargingStationArr.push(chargingStations[i])
-          console.log('*****************************')
-          console.log(currTimeLong)
-          console.log('*****************************')
-          console.log(car)
-          console.log('*****************************')
-          console.log(chargingStations[i])
-          console.log('*****************************')
+          // console.log('*****************************')
+          // console.log(currTimeLong)
           // console.log(this.timeArr)
           if (this.timeArr.length === chargingStations.length) {
+            // console.log(this.timeArr)
+            // console.log(chargingStations)
+            // debugger
             let minTime = this.timeArr[0]
-            let index = 0
+            // let index = 0
             let obj = null
             for (let j = 0; j < this.timeArr.length; j++) {
               if (this.timeArr[j] < minTime) {
                 minTime = this.timeArr[j]
-                obj = this.chargingStationArr[j]
-                index = j
+                obj = chargingStations[j]
+                // index = j
               }
             }
+            const carTemp = this.chargingMatchQueue.dequeue()
+            console.log('*****************************')
+            console.log(carTemp)
+            console.log(this.timeArr)
+            console.log(chargingStations)
+            console.log(obj)
+            console.log('*****************************')
+            // debugger
+            // console.log(this.chargingStationArr)
+            // console.log('*****************************')
+            // console.log(car)
+            // console.log('*****************************')
+            // console.log(obj)
+            // console.log('*****************************')
+            // console.log(index)
+            // console.log('*****************************')
             // console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx')
             // // console.log(index)
             // console.log(chargingStations)
@@ -366,11 +384,11 @@ export default {
             //   minTime: minTime,
             //   chargingStation: chargingStations[index]
             // }
-            console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-            console.log(this.chargingStationArr[index])
-            console.log(obj)
-            console.log('--------------------------------------------')
-            goToCharging(this.BMap, this.map, car.point, obj.point, car.id, '充电', 0)
+            // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            // console.log(this.chargingStationArr[index])
+            // console.log(obj)
+            // console.log('--------------------------------------------')
+            goToCharging(this.BMap, this.map, carTemp.point, obj.point, car.id, '充电', 0)
             // this.chargingMatchQueue.enqueue(obj)
             this.timeArr = []
             this.chargingStationArr = []
