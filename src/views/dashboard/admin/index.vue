@@ -293,6 +293,7 @@ export default {
                     item.carIcon = this.car_xyjyIcon
                     break
                   default:
+                    goToTask(this.BMap, this.map, o.evPoint, o.edPoint, o.id, o.remark, 0)
                 }
               } else {
                 if (o.mark === '去充电') {
