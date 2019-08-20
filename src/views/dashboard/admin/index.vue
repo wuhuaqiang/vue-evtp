@@ -120,6 +120,8 @@
 import stationImg from '@/assets/images/chargingStation.png'
 import car_normalImg from '@/assets/images/car_normal.png'
 import car_xycdImg from '@/assets/images/car_xycd.gif'
+import car_xyjyImg from '@/assets/images/car_xyjy.gif'
+import car_zzcdImg from '@/assets/images/car_zzcd.gif'
 import axios from 'axios'
 // import { getAllListWithLine } from '@/api/electricVehicle'
 import { save, delAll, getOneById } from '@/api/evtpPoints'
@@ -127,7 +129,7 @@ import { list } from '@/api/chargingStation'
 import { queryUserList } from '@/api/evtpUser'
 import { list as pointTypeList } from '@/api/evtpPointsType'
 import { initMap, evtpAction } from '@/api/evtpMap'
-import { goToWork, goToCharging } from '@/utils/evtpUserUtil'
+import { goToWork, goToTask } from '@/utils/evtpUserUtil'
 import { Queue } from '@/utils/queue'
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
@@ -169,6 +171,28 @@ export default {
           imageSize: { width: 18, height: 18 },
           infoWindowAnchor: { width: 0, height: 0 },
           printImageUrl: car_xycdImg
+        }
+      },
+      car_xyjyIcon: {
+        url: car_xyjyImg, // http://10.168.1.125:8088/api/images/car_xyjy.gif
+        size: { width: 18, height: 18 },
+        opts: {
+          anchor: { width: 0, height: 0 },
+          imageOffset: { width: 0, height: 0 },
+          imageSize: { width: 18, height: 18 },
+          infoWindowAnchor: { width: 0, height: 0 },
+          printImageUrl: car_xyjyImg
+        }
+      },
+      car_zzcdIcon: {
+        url: car_zzcdImg, // http://10.168.1.125:8088/api/images/car_xyjy.gif
+        size: { width: 18, height: 18 },
+        opts: {
+          anchor: { width: 0, height: 0 },
+          imageOffset: { width: 0, height: 0 },
+          imageSize: { width: 18, height: 18 },
+          infoWindowAnchor: { width: 0, height: 0 },
+          printImageUrl: car_zzcdImg
         }
       },
       stationIcon: {
@@ -237,36 +261,49 @@ export default {
       }
       // 接收到消息的回调方法
       this.websocket.onmessage = (event) => {
-        // debugger
         const obj = JSON.parse(event.data)
-        // console.log(obj)
-        // console.log(this.tElectricVehiclePoints)
-        // console.log(this.tElectricVehiclePoints)
-        // this.tElectricVehiclePoints = obj
         for (const item of this.tElectricVehiclePoints) {
           for (const o of obj) {
             if (item.id === o.id) {
-              if (o.remark === '需要充电') {
-                item.carIcon = this.car_xycdIcon
-                goToCharging(this.BMap, this.map, o.evPoint, o.csPoint, o.id, '充电', 0)
-                // this.chargingMatchQueue.enqueue(item)
-                // const nearestChargingStation = this.nearestChargingStation(item, this.tChargingStations)
-                // console.log(nearestChargingStation)
+              console.log(o)
+              if (o.remark) {
+                // debugger
+                console.log(o.remark)
+                switch (o.remark) {
+                  case '需要充电':
+                    item.carIcon = this.car_xycdIcon
+                    goToTask(this.BMap, this.map, o.evPoint, o.csPoint, o.id, '充电', 0)
+                    break
+                  case '继续上班':
+                    item.carIcon = this.car_normalIcon
+                    goToTask(this.BMap, this.map, o.evPoint, o.edPoint, o.id, o.remark, 0)
+                    break
+                  case '继续下班':
+                    item.carIcon = this.car_normalIcon
+                    goToTask(this.BMap, this.map, o.evPoint, o.edPoint, o.id, o.remark, 0)
+                    break
+                  case '继续其他':
+                    item.carIcon = this.car_normalIcon
+                    goToTask(this.BMap, this.map, o.evPoint, o.edPoint, o.id, o.remark, 0)
+                    break
+                  case '正在充电':
+                    item.carIcon = this.car_zzcdIcon
+                    break
+                  case '需要救援':
+                    item.carIcon = this.car_xyjyIcon
+                    break
+                  default:
+                }
               } else {
-                // console.log(item.point)
-                // console.log(obj.positionVal)
+                if (o.mark === '去充电') {
+                  item.carIcon = this.car_xycdIcon
+                } else {
+                  item.carIcon = this.car_normalIcon
+                }
                 item.point = o.evPoint
               }
             }
           }
-          // if (item.id === obj.id) {
-          //   console.log(item.point)
-          //   console.log(obj.positionVal)
-          //   item.point = obj.point
-          // }
-          // if (item.id === obj.carId) {
-          //   item.point = obj.mapPoint
-          // }
         }
         // console.log(this.tElectricVehiclePoints)
         // console.log(JSON.parse(event.data))
@@ -388,7 +425,7 @@ export default {
             // console.log(this.chargingStationArr[index])
             // console.log(obj)
             // console.log('--------------------------------------------')
-            goToCharging(this.BMap, this.map, carTemp.point, obj.point, car.id, '充电', 0)
+            goToTask(this.BMap, this.map, carTemp.point, obj.point, car.id, '充电', 0)
             // this.chargingMatchQueue.enqueue(obj)
             this.timeArr = []
             this.chargingStationArr = []
@@ -401,9 +438,9 @@ export default {
       }
     },
     splitData(rawData) {
-      var categoryData = []
-      var values = []
-      var volumes = []
+      const categoryData = []
+      const values = []
+      const volumes = []
       for (var i = 0; i < rawData.length; i++) {
         categoryData.push(rawData[i].splice(0, 1)[0])
         values.push(rawData[i])

@@ -42,7 +42,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     const fullYear = date.getFullYear() // 获取完整的年份(4位,1970)
     const month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
     const date1 = date.getDate() // 获取当前日(1-31)
-    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 11:03')).getTime()
+    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 11:15')).getTime()
     // const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
     // console.log(oldTime)
     // console.log(newDate)
@@ -111,7 +111,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
   transit.search(homePoint, companyPoint)
   return ''
 }
-export function goToCharging(BMap, map, startPoint, endPoint, owerId, remark, type) {
+export function goToTask(BMap, map, startPoint, endPoint, owerId, remark, type) {
   const geoc = new BMap.Geocoder()
   // console.log(BMap)
   // console.log(map)
