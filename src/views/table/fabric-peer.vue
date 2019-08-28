@@ -38,7 +38,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="'节点地址\n(peerLocation)'" align="center" >
+      <el-table-column :label="'节点地址\n(peerLocation)'" align="center">
         <template slot-scope="{row}">
           <el-tag>
             {{ row.peer_location }}
@@ -74,17 +74,17 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
-      <el-form ref="dataForm"  :model="temp" label-position="right" label-width="280px" class="demo-form-inline" style="width:80%; margin-left:30px;">
+      <el-form ref="dataForm" :model="temp" label-position="right" label-width="280px" class="demo-form-inline" style="width:80%; margin-left:30px;">
         <el-form-item size="small" :label="'配置信息(configInfo)'">
           <el-select v-model="temp.config_id" class="filter-item" placeholder="Please select" style="width: 210px" @change="changeAll">
             <el-option v-for="item in configOptions" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item :label="'节点名称(peerName)'">
-          <el-input v-model="temp.peer_name" placeholder="请输入组织名称" class="input-with-select"  @change="setEvent()">
-            <el-select v-model="temp.peer_name_pre" slot="prepend" placeholder="请选择" style="width: 130px" @change="setEvent()">
-              <el-option label="peer0" value="peer0"></el-option>
-              <el-option label="peer1" value="peer1"></el-option>
+          <el-input v-model="temp.peer_name" placeholder="请输入组织名称" class="input-with-select" @change="setEvent()">
+            <el-select slot="prepend" v-model="temp.peer_name_pre" placeholder="请选择" style="width: 130px" @change="setEvent()">
+              <el-option label="peer0" value="peer0" />
+              <el-option label="peer1" value="peer1" />
             </el-select>
             <template slot="append">.example.com</template>
           </el-input>
@@ -93,7 +93,7 @@
           </el-select>-->
         </el-form-item>
         <el-form-item :label="'节点事件名称(peerEventHubName)'">
-          <el-input v-model="temp.peer_eventhubname" readonly="true"/>
+          <el-input v-model="temp.peer_eventhubname" readonly="true" />
           <!--<el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />-->
         </el-form-item>
         <el-form-item :label="'节点地址(peerLocation)'">

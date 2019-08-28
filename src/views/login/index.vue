@@ -65,13 +65,12 @@
       </div>-->
     </el-form>
     <el-dialog :title="'注册'" :visible.sync="dialogFormVisible" width="40%">
-      <el-form ref="dataForm"  :model="loginForm" label-position="right" label-width="80">
-        <el-form-item size="small" :label="'配置信息(configInfo)'">
-        </el-form-item>
+      <el-form ref="dataForm" :model="loginForm" label-position="right" label-width="80">
+        <el-form-item size="small" :label="'配置信息(configInfo)'" />
         <el-form-item prop="username" size="small" :label="'用户名'" style="background: #7d7d7f">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
+          <span class="svg-container">
+            <svg-icon icon-class="user" />
+          </span>
           <el-input
             ref="username"
             v-model="loginForm.username"
