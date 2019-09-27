@@ -115,6 +115,16 @@ export function randomNum(minNum, maxNum) {
       return 0
   }
 }
+export function randomNumDuble(minNum, maxNum) {
+  switch (arguments.length) {
+    case 1:
+      return Math.random() * minNum + 1
+    case 2:
+      return Math.random() * (maxNum - minNum) + minNum
+    default:
+      return 0
+  }
+}
 export function uuid(len, radix) {
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   const uuid = []
