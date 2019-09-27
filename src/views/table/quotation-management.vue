@@ -11,6 +11,12 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleAuthenticOffer">
         真实报价
       </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleVerificationOffer">
+        验证报价
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="getQualifiedOfferList">
+        获取有效报价
+      </el-button>
     </div>
 
     <el-table
@@ -84,6 +90,28 @@
       <!--        </template>-->
       <!--      </el-table-column>-->
     </el-table>
+    <el-dialog :title="'报价列表'" :visible.sync="dialogFormVisible" width="50%">
+      <el-table
+        :data="tableData"
+        height="250"
+        border
+        style="width: 100%"
+      >
+        <el-table-column :label="'用户ID'" align="center" prop="id" />
+        <el-table-column :label="'电量'" align="center" prop="number" />
+        <el-table-column :label="'电价'" align="center" prop="price" />
+        <el-table-column :label="'角色'" align="center">
+          <template slot-scope="{row}">
+            <el-tag v-if="row.status==='1'" type="danger">
+              {{ "充电" }}
+            </el-tag>
+            <el-tag v-else type="success">
+              {{ "放电" }}
+            </el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
@@ -91,6 +119,7 @@
 
 <script>
 import { queryFabricConfigList } from '@/api/fabricConfig'
+import request from '@/utils/request-api'
 import { save, update, del } from '@/api/evtpPointsType'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -114,8 +143,11 @@ export default {
   },
   data() {
     return {
+      tableData: [],
+      timer: null, // 定时器名称
       tableKey: 0,
       list: [],
+      offerId: '',
       total: 0,
       userNum: 20,
       configOptions: [],
@@ -152,6 +184,7 @@ export default {
   },
   methods: {
     getList() {
+      this.offerId = uuid(32)
       this.listLoading = true
       this.list = []
       for (let i = 0; i < this.userNum; i++) {
@@ -189,15 +222,33 @@ export default {
     },
     handleEncryptedOffer() {
       const param = []
+      const funcName = 'addEncryptedOffer'
+      const data = {}
+      data.fcn = funcName
       this.multipleSelection.forEach(obj => {
+        const args = []
         const copy = Object.assign({}, obj)
         copy.price = md5(obj.price + obj.salt)
         copy.number = md5(obj.number + obj.salt)
         delete copy['salt']
-        param.push(copy)
+        args.push(this.offerId)
+        args.push(copy.id)
+        args.push(copy.number)
+        args.push(copy.price)
+        args.push(copy.status)
+        // data.args = JSON.stringify(args)
+        // const paramObj = Object.assign({}, args)
+        // console.log(JSON.stringify(data))
+        param.push(JSON.stringify(args))
+        // this.invoke(paramObj)
+        // this.sleep(20000)
       })
-      console.log(this.multipleSelection)
-      console.log(param)
+      // debugger
+      data.args = JSON.stringify(param)
+      console.log(data)
+      this.invokeBatch(data)
+      // console.log(this.multipleSelection)
+      // console.log(param)
       // console.log(md5('213123'))
       // const Md5 = crypto.createHash('md5')
       // // update("中文", "utf8")
@@ -205,8 +256,111 @@ export default {
       // const a = Md5.digest('hex')
       // console.log(a)
     },
+    invoke(data) {
+      // setTimeout(
+      console.log(data)
+      request({
+        url: '/chaincode/invoke',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: data
+      }).then(response => {
+        if (response.code === 200) {
+          console.log(JSON.stringify(response.data))
+        } else {
+          console.log(JSON.stringify(response.data))
+        }
+      })
+      // , 10000)
+    },
+    invokeBatch(data) {
+      console.log(data)
+      request({
+        url: '/chaincode/invokeBatch',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: data
+      }).then(response => {
+        if (response.code === 200) {
+          console.log(JSON.stringify(response.data))
+        } else {
+          console.log(JSON.stringify(response.data))
+        }
+      })
+    },
+    sleep(n) {
+      const start = new Date().getTime() // 定义起始时间的毫秒数
+      let loop = 1
+      while (loop === 1) {
+        const time = new Date().getTime() // 每次执行循环取得一次当前时间的毫秒数
+        if (time - start > n) { // 如果当前时间的毫秒数减去起始时间的毫秒数大于给定的毫秒数，即结束循环
+          break
+        }
+        loop = 1
+      }
+    },
     handleAuthenticOffer() {
       console.log(this.multipleSelection)
+      const param = []
+      const funcName = 'addAuthenticOffer'
+      const data = {}
+      data.fcn = funcName
+      this.multipleSelection.forEach(obj => {
+        const args = []
+        args.push(this.offerId)
+        args.push(obj.id)
+        args.push(obj.number)
+        args.push(obj.price)
+        args.push(obj.salt)
+        args.push(obj.status)
+        // data.args = JSON.stringify(args)
+        // console.log(JSON.stringify(data))
+        // const paramObj = Object.assign({}, data)
+        // console.log(JSON.stringify(data))
+        // this.invoke(paramObj)
+        // this.sleep(20000)
+        param.push(JSON.stringify(args))
+      })
+      data.args = JSON.stringify(param)
+      console.log(data)
+      this.invokeBatch(data)
+      // this.handleVerificationOffer()
+    },
+    handleVerificationOffer() {
+      const funcName = 'verificationOffer'
+      const data = {}
+      const args = []
+      data.fcn = funcName
+      args.push(this.offerId)
+      data.args = JSON.stringify(args)
+      console.log(JSON.stringify(data))
+      this.invoke(data)
+    },
+    getQualifiedOfferList() {
+      const funcName = 'getQualifiedOfferList'
+      const data = {}
+      const args = []
+      data.fcn = funcName
+      args.push(this.offerId)
+      data.args = JSON.stringify(args)
+      console.log(JSON.stringify(data))
+      request({
+        url: '/chaincode/invoke',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: data
+      }).then(response => {
+        if (response.code === 200) {
+          this.dialogFormVisible = true
+          this.tableData = response.data.qualified_offer_arr
+          console.log(response.data.qualified_offer_arr)
+        } else {
+          console.log(JSON.stringify(response.data))
+        }
+      })
     },
     handleDellRow(index, rows) {
       debugger
