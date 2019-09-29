@@ -42,7 +42,25 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     const fullYear = date.getFullYear() // 获取完整的年份(4位,1970)
     const month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
     const date1 = date.getDate() // 获取当前日(1-31)
-    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + ' 14:50')).getTime()
+    const hours = date.getHours() // 获取当前日(时间)
+    const minutes = date.getMinutes() // 获取当前日(0-60)
+    let mt = minutes + 2
+    let h = hours
+    // eslint-disable-next-line no-unused-vars
+    let timeStr = ' ' + hours + ':' + mt
+    if (mt < 60) {
+      timeStr = ' ' + h + ':' + mt
+    } else {
+      mt = mt - 60
+      h = h + 1
+      if (h < 24) {
+        h = h - 24
+        timeStr = ' ' + h + ':' + mt
+      }
+      timeStr = ' ' + h + ':' + mt
+    }
+    debugger
+    const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + timeStr)).getTime()
     // const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
     // console.log(oldTime)
     // console.log(newDate)

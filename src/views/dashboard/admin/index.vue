@@ -163,7 +163,7 @@ export default {
         }
       },
       car_xycdIcon: {
-        url: car_xycdImg, // http://10.168.1.125:8088/api/images/car_xycd.gif
+        url: car_xycdImg, // http://10.168.1.245:8088/api/images/car_xycd.gif
         size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
@@ -174,7 +174,7 @@ export default {
         }
       },
       car_xyjyIcon: {
-        url: car_xyjyImg, // http://10.168.1.125:8088/api/images/car_xyjy.gif
+        url: car_xyjyImg, // http://10.168.1.245:8088/api/images/car_xyjy.gif
         size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
@@ -185,7 +185,7 @@ export default {
         }
       },
       car_zzcdIcon: {
-        url: car_zzcdImg, // http://10.168.1.125:8088/api/images/car_xyjy.gif
+        url: car_zzcdImg, // http://10.168.1.245:8088/api/images/car_xyjy.gif
         size: { width: 18, height: 18 },
         opts: {
           anchor: { width: 0, height: 0 },
@@ -196,7 +196,7 @@ export default {
         }
       },
       stationIcon: {
-        url: stationImg, // http://10.168.1.125:8088/api/images/chargingStation.png
+        url: stationImg, // http://10.168.1.245:8088/api/images/chargingStation.png
         size: { width: 40, height: 40 },
         opts: {
           anchor: { width: 0, height: 0 },
@@ -250,7 +250,7 @@ export default {
       console.log(err)
     })
     if ('WebSocket' in window) {
-      this.websocket = new WebSocket('ws://10.168.1.185:2004/websocket')
+      this.websocket = new WebSocket('ws://10.168.1.144:2004/websocket')
       // 连接发生错误的回调方法
       this.websocket.onerror = () => {
         console.log('与服务器连接失败...')
@@ -864,7 +864,7 @@ export default {
     },
     addKLineTu() {
       const this_ = this
-      axios.get('http://10.168.1.125:8088/api/images/stock-DJI.json').then((rawData) => {
+      axios.get('http://10.168.1.245:8088/api/images/stock-DJI.json').then((rawData) => {
         const data = this_.splitData(rawData.data)
         // debugger
         // console.log(data)
@@ -1134,7 +1134,7 @@ export default {
       })
     },
     addZlineTu() {
-      axios.get('http://10.168.1.125:8088/api/images/aqi-beijing.json').then(result => {
+      axios.get('http://10.168.1.245:8088/api/images/aqi-beijing.json').then(result => {
         const data = result.data
         data.map(obj => {
           obj[1] = Math.random()
