@@ -129,6 +129,20 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column :label="'ca服务器地址\n(CaLocation)'" class-name="status-col" width="180" align="center">
+        <template slot-scope="{row}">
+          <el-tag>
+            {{ row.ca_location }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="'ca服务器名称\n(CaName)'" class-name="status-col" width="180" align="center">
+        <template slot-scope="{row}">
+          <el-tag>
+            {{ row.ca_name }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column :label="'开启\nTLS(IsTls)'" class-name="status-col" width="180" align="center">
         <template slot-scope="{row}">
           <el-tag>
@@ -224,6 +238,12 @@
         <el-form-item :label="'交易等待时间(InvokeWaittime)'">
           <!--<el-input v-model="temp.invoke_waittime" />-->
           <el-input-number v-model="temp.invoke_waittime" :precision="0" :step="100" :min="200" :max="1000" />
+        </el-form-item>
+        <el-form-item :label="'ca服务器地址'">
+          <el-input v-model="temp.ca_location" />
+        </el-form-item>
+        <el-form-item :label="'ca服务器名称'">
+          <el-input v-model="temp.ca_name" />
         </el-form-item>
         <el-form-item :label="'开启TLS(IsTls)'">
           <el-switch
@@ -335,7 +355,9 @@ export default {
         invoke_waittime: '', // 交易等待时间
         is_tls: false, // 是否开启TLS
         is_catls: false, // 是否开启CA TLS
-        is_delete: false // 是否删除
+        is_delete: false, // 是否删除
+        ca_location: '', // ca服务器请求地址
+        ca_name: '' // ca服务器名称
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -412,7 +434,9 @@ export default {
         invoke_waittime: '', // 交易等待时间
         is_tls: false, // 是否开启TLS
         is_catls: false, // 是否开启CA TLS
-        is_delete: false // 是否删除
+        is_delete: false, // 是否删除
+        ca_location: '', // ca服务器请求地址
+        ca_name: '' // ca服务器名称
       }
     },
     handleCreate() {
