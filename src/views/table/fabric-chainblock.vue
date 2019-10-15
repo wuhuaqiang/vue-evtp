@@ -87,7 +87,9 @@ export default {
       dialogFormVisible: false,
       functionOption: '查询智能合约',
       fileList: [],
-      fcnOptions: [{ key: 'queryAccount', value: '查询账号余额' }, { key: 'getAccountHistory', value: '查询转账记录' }, { key: 'transferAccounts', value: '转账' }, { key: 'initAccount', value: '充值' }],
+      fcnOptions: [{ key: 'queryAccount', value: '查询账号余额' }, { key: 'getAccountHistory', value: '查询转账记录' }, { key: 'transferAccounts', value: '转账' }, { key: 'initAccount', value: '充值' },
+        { key: 'getAccountBalance', value: '查询账号余额-java' }, { key: 'depositMoney', value: '存款-java' }, { key: 'drawalMoney', value: '取款-java' }, { key: 'transferAccount', value: '转账-java' },
+        { key: 'createAccount', value: '开户-java' }, { key: 'getAccountTransactionRecords', value: '查询交易记录-java' }, { key: 'getAllAccounts', value: '查询所有账户-java' }],
       temp: {
         args: '',
         fcn: ''

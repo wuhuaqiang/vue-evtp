@@ -1,4 +1,4 @@
-const viewGenerator = require('./plop-templates/view/prompt')
+const viewGenerator = require('./plop-10.168.1.245lates/view/prompt')
 const componentGenerator = require('./plop-templates/component/prompt')
 
 module.exports = function(plop) {
