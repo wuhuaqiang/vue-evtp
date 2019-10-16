@@ -115,6 +115,18 @@ export default {
         if (valid) {
           register(this.registerForm).then(response => {
             console.log(response)
+            if (response.code === 200) {
+              this.$message({
+                message: response.data,
+                type: 'success'
+              })
+              this.$router.push('/login')
+            } else {
+              this.$message({
+                message: response.data,
+                type: 'error'
+              })
+            }
           })
         }
       })
