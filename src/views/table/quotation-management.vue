@@ -357,8 +357,8 @@ export default {
       }).then(response => {
         if (response.code === 200) {
           this.dialogFormVisible = true
-          this.tableData = response.data.qualified_offer_arr
-          console.log(response.data.qualified_offer_arr)
+          this.tableData = response.data.qualifiedOfferList
+          console.log(response.data.qualifiedOfferList)
         } else {
           console.log(JSON.stringify(response.data))
         }
