@@ -232,10 +232,11 @@ export default {
         copy.number = md5(obj.number + obj.salt)
         delete copy['salt']
         args.push(this.offerId)
-        args.push(copy.id)
+        /* args.push(copy.id)
         args.push(copy.number)
         args.push(copy.price)
-        args.push(copy.status)
+        args.push(copy.status)*/
+        args.push(copy)
         // data.args = JSON.stringify(args)
         // const paramObj = Object.assign({}, args)
         // console.log(JSON.stringify(data))
@@ -310,11 +311,12 @@ export default {
       this.multipleSelection.forEach(obj => {
         const args = []
         args.push(this.offerId)
-        args.push(obj.id)
+        /* args.push(obj.id)
         args.push(obj.number)
         args.push(obj.price)
         args.push(obj.salt)
-        args.push(obj.status)
+        args.push(obj.status)*/
+        args.push(obj)
         // data.args = JSON.stringify(args)
         // console.log(JSON.stringify(data))
         // const paramObj = Object.assign({}, data)
