@@ -198,8 +198,8 @@ export const asyncRoutes = [
         meta: { title: 'JSON数据测试', icon: 'alien', noCache: true }
       }
     ]
-  },
-  {
+  }
+  /* {
     path: '/simulationSysMsg',
     component: Layout,
     redirect: '/table/fabric-config',
@@ -330,7 +330,7 @@ export const asyncRoutes = [
         meta: { title: '电量列表' }
       }
     ]
-  }
+  }*/
 ]
 
 const createRouter = () => new Router({
