@@ -135,6 +135,71 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
+    path: '/batchRegistration',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/ev-user/index'),
+        name: 'EVUser',
+        meta: { title: '电动汽车用户', icon: 'documentation', affix: true }
+      }
+    ]
+  },
+
+  {
+    path: '/generateQuotation',
+    component: Layout,
+    // redirect: '/guide/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/charge-operator/index'),
+        name: 'GenerateQuotation',
+        meta: { title: '充电运营商', icon: 'edit', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/transactionMatching',
+    component: Layout,
+    redirect: '/guide/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/p2p-blockchain/index'),
+        name: 'TransactionMatching',
+        meta: { title: '区块链服务商', icon: 'link', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/system-test',
+    component: Layout,
+    // redirect: '/guide/index',
+    name: 'SystemTest',
+    meta: {
+      title: '系统测试',
+      icon: 'excel'
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system-test/welcome/index'),
+        name: 'test',
+        meta: { title: '测试主页', icon: 'link', noCache: true }
+      },
+      {
+        path: 'index2',
+        component: () => import('@/views/system-test/get-json/index'),
+        name: 'GenerateQuotation',
+        meta: { title: 'JSON数据测试', icon: 'alien', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/simulationSysMsg',
     component: Layout,
     redirect: '/table/fabric-config',
