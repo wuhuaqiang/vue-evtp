@@ -1,4 +1,4 @@
-import request from '@/utils/request-api'
+import request from '@/utils/request-api-test'
 
 export function add(data) {
   return request({
