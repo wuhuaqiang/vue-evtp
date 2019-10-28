@@ -3,7 +3,7 @@
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    <p class="evtp-title">基于区块链技术的电动汽车P2P电量交易仿真系统</p>
+    <p class="evtp-title">基于联盟区块链的综合能源服务实验平台</p>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />

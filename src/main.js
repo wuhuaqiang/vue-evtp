@@ -5,6 +5,9 @@ import Cookies from 'js-cookie'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
 import Element from 'element-ui'
+// import ViewUI from 'view-design'
+
+// import 'view-design/dist/styles/iview.css'
 
 import BaiduMap from 'vue-baidu-map'
 
@@ -40,6 +43,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
+// Vue.use(ViewUI)
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
   ak: 'zpyZejVhCUS8fjCVhmS7IDi6R79u6eVl'
