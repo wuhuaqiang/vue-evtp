@@ -115,7 +115,7 @@ export default {
     font-size: 25px;
     color: #0a76a4;
     position: fixed;
-    top:-20px;
+    top:10px;
     left: 40%;
     text-align: center !important;
   }
