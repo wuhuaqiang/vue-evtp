@@ -250,7 +250,7 @@ export default {
       console.log(err)
     })
     if ('WebSocket' in window) {
-      this.websocket = new WebSocket('ws://10.168.1.101:2004/websocket')
+      this.websocket = new WebSocket('ws://10.168.1.102:2004/websocket')
       // 连接发生错误的回调方法
       this.websocket.onerror = () => {
         console.log('与服务器连接失败...')
