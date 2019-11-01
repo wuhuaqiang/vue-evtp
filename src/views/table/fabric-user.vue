@@ -225,7 +225,7 @@ export default {
       this.getList()
     },
     handleDellRow(index, rows) {
-      debugger
+      // debugger
       console.log(rows)
       rows.splice(index, 1)
       this.$message({
@@ -275,7 +275,7 @@ export default {
               return
             }
           }
-          debugger
+          // debugger
           console.log(this.temp)
           this.dialogFormVisible = false
           createFabricUser(this.temp).then(() => {
@@ -307,7 +307,7 @@ export default {
           // tempData.orderer_location = 'grpc://' + tempData.orderer_location + ':7050'
           // tempData.orderer_name = 'orderer' + tempData.orderer_name + '.example.com'
           updateFabricUser(tempData).then(() => {
-            debugger
+            // debugger
             for (const v of this.list) {
               if (v.row_id === this.temp.row_id) {
                 const index = this.list.indexOf(v)
@@ -338,7 +338,7 @@ export default {
         this.list.splice(index, 1)
       })*/
       row.is_delete = 1
-      debugger
+      // debugger
       updateFabricUser(row).then(() => {
         this.$notify({
           title: '成功!',

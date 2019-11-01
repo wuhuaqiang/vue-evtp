@@ -40,11 +40,11 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    debugger
+    // debugger
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       /* login({ username: username.trim(), password: password }).then(response => {
-        debugger
+        // debugger
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
@@ -53,7 +53,7 @@ const actions = {
         reject(error)
       })*/
       logonIn({ account: username.trim(), password: password }).then(response => {
-        debugger
+        // debugger
         console.log(response)
         const { data } = response
         data.token = 'admin-token'
@@ -138,7 +138,7 @@ const actions = {
 
       // generate accessible routes map based on roles
       const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
-      debugger
+      // debugger
       // dynamically add accessible routes
       router.addRoutes(accessRoutes)
 

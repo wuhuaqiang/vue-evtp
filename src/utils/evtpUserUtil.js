@@ -59,7 +59,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
       }
       timeStr = ' ' + h + ':' + mt
     }
-    debugger
+    // debugger
     const oldTime = (new Date(fullYear + '/' + month + '/' + date1 + timeStr)).getTime()
     // const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
     // console.log(oldTime)
