@@ -365,7 +365,7 @@ export default {
       })
     },
     handleDellRow(index, rows) {
-      debugger
+      // debugger
       console.log(rows)
       rows.splice(index, 1)
       this.$message({

@@ -227,7 +227,7 @@ export default {
     console.log(this)
     // console.log(this.chargingMatchQueue)
     // console.log(this)
-    setInterval(this.moveStep, 1000)
+    // setInterval(this.moveStep, 1000)
     this.getAllElectricVehicleDatas()
     this.getAllTChargingStation()
     // 建立连接对象
@@ -250,7 +250,7 @@ export default {
       console.log(err)
     })
     if ('WebSocket' in window) {
-      this.websocket = new WebSocket('ws://10.168.1.101:2004/websocket')
+      this.websocket = new WebSocket('ws://10.168.1.102:2004/websocket')
       // 连接发生错误的回调方法
       this.websocket.onerror = () => {
         console.log('与服务器连接失败...')
@@ -1623,7 +1623,7 @@ export default {
           // console.log('******************************')
           // console.log(this_.polygonPath)
           // console.log('******************************')
-        /*  debugger
+        /* debugger
           if (driving.getStatus() === BMAP_STATUS_SUCCESS) {
             // 获取第一条方案
             const plan = results.getPlan(0)

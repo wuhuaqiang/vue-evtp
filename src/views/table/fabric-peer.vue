@@ -270,7 +270,7 @@ export default {
       this.getList()
     },
     handleDellRow(index, rows) {
-      debugger
+      // debugger
       console.log(rows)
       rows.splice(index, 1)
       this.$message({
@@ -365,7 +365,7 @@ export default {
           this.temp.peer_eventhublocation = 'grpc://' + this.temp.peer_eventhublocation + ':7053'
           const tempData = Object.assign({}, this.temp)
           updateFabricPeer(tempData).then(() => {
-            debugger
+            // debugger
             for (const v of this.list) {
               if (v.row_id === this.temp.row_id) {
                 const index = this.list.indexOf(v)
@@ -396,7 +396,7 @@ export default {
         this.list.splice(index, 1)
       })*/
       row.is_delete = true
-      debugger
+      // debugger
       updateFabricPeer(row).then(() => {
         this.$notify({
           title: '成功!',
