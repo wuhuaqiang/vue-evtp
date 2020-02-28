@@ -134,71 +134,71 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: '/batchRegistration',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/ev-user/index'),
-        name: 'EVUser',
-        meta: { title: '电动汽车用户', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-
-  {
-    path: '/generateQuotation',
-    component: Layout,
-    // redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/charge-operator/index'),
-        name: 'GenerateQuotation',
-        meta: { title: '充电运营商', icon: 'edit', noCache: true }
-      }
-    ]
-  },
-
-  {
-    path: '/transactionMatching',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/p2p-blockchain/index'),
-        name: 'TransactionMatching',
-        meta: { title: '区块链服务商', icon: 'link', noCache: true }
-      }
-    ]
-  },
-
-  {
-    path: '/system-test',
-    component: Layout,
-    // redirect: '/guide/index',
-    name: 'SystemTest',
-    meta: {
-      title: '系统测试',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/system-test/welcome/index'),
-        name: 'test',
-        meta: { title: '测试主页', icon: 'link', noCache: true }
-      },
-      {
-        path: 'index2',
-        component: () => import('@/views/system-test/get-json/index'),
-        name: 'GenerateQuotation',
-        meta: { title: 'JSON数据测试', icon: 'alien', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/batchRegistration',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/ev-user/index'),
+  //       name: 'EVUser',
+  //       meta: { title: '电动汽车用户', icon: 'documentation', affix: true }
+  //     }
+  //   ]
+  // },
+  //
+  // {
+  //   path: '/generateQuotation',
+  //   component: Layout,
+  //   // redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/charge-operator/index'),
+  //       name: 'GenerateQuotation',
+  //       meta: { title: '充电运营商', icon: 'edit', noCache: true }
+  //     }
+  //   ]
+  // },
+  //
+  // {
+  //   path: '/transactionMatching',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/p2p-blockchain/index'),
+  //       name: 'TransactionMatching',
+  //       meta: { title: '区块链服务商', icon: 'link', noCache: true }
+  //     }
+  //   ]
+  // },
+  //
+  // {
+  //   path: '/system-test',
+  //   component: Layout,
+  //   // redirect: '/guide/index',
+  //   name: 'SystemTest',
+  //   meta: {
+  //     title: '系统测试',
+  //     icon: 'excel'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/system-test/welcome/index'),
+  //       name: 'test',
+  //       meta: { title: '测试主页', icon: 'link', noCache: true }
+  //     },
+  //     {
+  //       path: 'index2',
+  //       component: () => import('@/views/system-test/get-json/index'),
+  //       name: 'GenerateQuotation',
+  //       meta: { title: 'JSON数据测试', icon: 'alien', noCache: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/simulationSysMsg',
     component: Layout,
@@ -215,17 +215,23 @@ export const asyncRoutes = [
         name: 'simulationParameterSetting',
         meta: { title: '模拟参数设置' }
       },
-      {
-        path: 'simulationResults-analysis',
-        component: () => import('@/views/table/fabric-config'),
-        name: 'simulationResultsAnalysis',
-        meta: { title: '模拟结果分析' }
-      },
+      // {
+      //   path: 'simulationResults-analysis',
+      //   component: () => import('@/views/table/fabric-config'),
+      //   name: 'simulationResultsAnalysis',
+      //   meta: { title: '模拟结果分析' }
+      // },
       {
         path: 'points-type-msg',
         component: () => import('@/views/table/points-type-msg'),
         name: 'pointsTypeMsg',
         meta: { title: '点类型管理' }
+      },
+      {
+        path: 'evtp-line-msg',
+        component: () => import('@/views/table/evtp-line-msg'),
+        name: 'evtpLineMsg',
+        meta: { title: '电动汽车线路管理' }
       },
       {
         path: 'evtp-user-msg',
