@@ -268,9 +268,17 @@ export default {
         data: data
       }).then(response => {
         if (response.code === 200) {
-          console.log(JSON.stringify(response.data))
+          this.$message({
+            showClose: true,
+            message: response.message,
+            type: 'success'
+          })
         } else {
-          console.log(JSON.stringify(response.data))
+          this.$message({
+            showClose: true,
+            message: response.message,
+            type: 'success'
+          })
         }
       })
       // , 10000)
@@ -285,9 +293,17 @@ export default {
         data: data
       }).then(response => {
         if (response.code === 200) {
-          console.log(JSON.stringify(response.data))
+          this.$message({
+            showClose: true,
+            message: response.data,
+            type: 'success'
+          })
         } else {
-          console.log(JSON.stringify(response.data))
+          this.$message({
+            showClose: true,
+            message: response.data,
+            type: 'success'
+          })
         }
       })
     },
@@ -356,8 +372,12 @@ export default {
         data: data
       }).then(response => {
         if (response.code === 200) {
-          this.dialogFormVisible = true
-          this.tableData = response.data.qualifiedOfferList
+          console.log(response.data)
+          const result = JSON.parse(response.data)
+          if (result.data) {
+            this.dialogFormVisible = true
+            this.tableData = result.data.qualifiedOfferList
+          }
           console.log(response.data.qualifiedOfferList)
         } else {
           console.log(JSON.stringify(response.data))
