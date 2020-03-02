@@ -25,7 +25,8 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     // console.log(owerId)
     // console.log(homePosition)
     // console.log(companyPosition)
-    const zr = results.xr[0].dk[0].zr
+    // console.log(results)
+    const zr = results.yr[0].dk[0].Ar
     // console.log(transit.getStatus())
     if (transit.getStatus() !== 0) {
       return
