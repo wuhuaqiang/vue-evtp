@@ -250,7 +250,7 @@ export default {
       console.log(err)
     })
     if ('WebSocket' in window) {
-      this.websocket = new WebSocket('ws://10.168.1.102:2004/websocket')
+      this.websocket = new WebSocket('ws://10.168.1.103:2004/websocket')
       // 连接发生错误的回调方法
       this.websocket.onerror = () => {
         console.log('与服务器连接失败...')
@@ -472,7 +472,7 @@ export default {
       evtpAction().then((response) => {
         if (response.code === 200) {
           this.$message({
-            message: '初始化成功',
+            message: '模拟开始成功',
             type: 'success'
           })
         }
@@ -527,7 +527,8 @@ export default {
           var totalPages = results.getNumPages()
           var currPage = results.getPageIndex()// 获取当前是第几页数据
           // const ResultArray = []
-          this_.savePointsUtil(results.Ar, keyword)
+          console.log(results)
+          this_.savePointsUtil(results.Br, keyword)
           if (currPage < totalPages - 1) {
             // this_.ResultArray.push(...results.Ar)
             local.gotoPage(currPage + 1)
@@ -1608,11 +1609,13 @@ export default {
         // renderOptions: { map: map, autoViewport: false },
         onSearchComplete(results) {
           this_.polygonPath = []
-          const points = results.xr[0].dk
-          // console.log(points)
+          console.log(results)
+          // const points = results.xr[0].dk
+          const points = results.yr[0].dk
+          console.log(points)
           points.map(obj => {
             // console.log(obj)
-            obj.zr.map(k => {
+            obj.Ar.map(k => {
               this_.polygonPath.push(k)
             })
           })
