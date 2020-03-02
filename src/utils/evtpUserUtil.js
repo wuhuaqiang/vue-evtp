@@ -148,7 +148,18 @@ export function goToTask(BMap, map, startPoint, endPoint, owerId, remark, type) 
     endPosition = addComp.district + addComp.street + addComp.streetNumber
   })
   const searchComplete = (results) => {
-    const zr = results.xr[0].dk[0].zr
+    console.log(results)
+    let zr = null
+    if (results.xr) {
+      zr = results.xr[0].dk[0]
+    } else {
+      zr = results.yr[0].dk[0]
+    }
+    if (zr.Ar) {
+      zr = zr.Ar
+    } else {
+      zr = zr.zr
+    }
     // console.log(transit.getStatus())
     if (transit.getStatus() !== 0) {
       return
