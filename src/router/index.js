@@ -319,21 +319,21 @@ export const asyncRoutes = [
     redirect: '/sell/sell-list',
     name: 'SellList',
     meta: {
-      title: '商品列表',
+      title: '电动汽车',
       icon: 'international'
     },
     children: [
-      {
-        path: 'car-list',
-        component: () => import('@/views/car/car-list'),
-        name: 'CarList',
-        meta: { title: '汽车列表' }
-      },
+      // {
+      //   path: 'car-list',
+      //   component: () => import('@/views/car/car-list'),
+      //   name: 'CarList',
+      //   meta: { title: '汽车列表' }
+      // },
       {
         path: 'power-list',
         component: () => import('@/views/car/power-list'),
         name: 'PowerList',
-        meta: { title: '电量列表' }
+        meta: { title: '汽车列表' }
       }
     ]
   }

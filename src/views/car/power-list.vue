@@ -210,13 +210,14 @@ export default {
     float: left;
     border: Grey 2px solid;
     border-radius: 15px;
-    margin: 15px;
+    margin: 10px;
     padding: 10px;
     padding-left: 0px;
-    background-color:rgba(224,238,238,0.2);
+    /*background-color:rgba(224,238,238,0.2);*/
+    background-color: #8c939d;
     /*box-shadow: #8c939d;*/
     box-shadow:5px 2px 8px #8c939d;
-    transform: rotate(-1.5deg);
+    /*transform: rotate(-1.5deg);*/
   }
   .buy-car {
     position:absolute;
@@ -238,5 +239,9 @@ export default {
   }
   .bottom{
     clear: both;
+  }
+  .main-container{
+    margin: 0px;
+    padding: 0px;
   }
 </style>

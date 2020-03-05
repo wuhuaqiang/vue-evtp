@@ -87,7 +87,7 @@ export default {
     padding-right: 10px;
   }
   .car-container .el-input-number{
-    margin-left: 40px;
+    margin-left: 20px;
   }
   .bottom{
     clear: both;
