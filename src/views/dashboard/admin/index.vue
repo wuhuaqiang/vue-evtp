@@ -347,6 +347,9 @@ export default {
     if (this.stompClient) {
       this.stompClient.disconnect()
     }
+    if (this.websocket) {
+      this.websocket.close()
+    }
   },
   methods: {
     handler({ BMap, map }) {
@@ -1668,7 +1671,7 @@ export default {
 <style lang="scss" scoped>
   .map {
     width: 100%;
-    height: 800px;
+    height: 900px;
   }
 
   .dashboard-editor-container {
@@ -1691,7 +1694,7 @@ export default {
   }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
-    min-height: 400px;
+    min-height:450px;
   }
   .el-icon-arrow-down:before {
     content: "\E6DF";
@@ -1721,14 +1724,14 @@ export default {
     /*float: right;*/
     /*width: 50%;*/
     /*height: 500px;*/
-    height:400px;
+    min-height:450px;
     margin: 0px;
     border: 1px solid grey;
     /*border-radius: 15px;*/
     /*box-shadow: 10px 10px 5px #bfbfbf;*/
   }
   .right-container{
-    height: 800px;
+    min-height: 900px;
     /*background: #bfbfbf;*/
   }
 </style>
