@@ -1736,10 +1736,10 @@ export default {
   }
 </style>
 <style>
-  span.BMap_Marker div img{
-    background-image: url('..') !important;
-    margin-left: 0px !important;
-  }
+  /*span.BMap_Marker div img{*/
+  /*  background-image: url('..') !important;*/
+  /*  margin-left: 0px !important;*/
+  /*}*/
   .handle-button[data-v-1e488bfb] {
     width: 48px;
     height: 48px;
@@ -1756,7 +1756,6 @@ export default {
     line-height: 48px;
   }
   .right-container{
-
   }
   .point-ctr {
     position: absolute;
