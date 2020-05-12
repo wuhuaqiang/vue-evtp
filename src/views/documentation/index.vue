@@ -3,17 +3,17 @@
     <a
       class="document-btn"
       target="_blank"
-      href="https://panjiachen.github.io/vue-element-admin-site/"
+      href="https://panjiachen.github.io/vue-evtp-site/"
     >Documentation</a>
     <a
       class="document-btn"
       target="_blank"
-      href="https://github.com/PanJiaChen/vue-element-admin/"
+      href="https://github.com/PanJiaChen/vue-evtp/"
     >Github Repository</a>
     <a
       class="document-btn"
       target="_blank"
-      href="https://panjiachen.gitee.io/vue-element-admin-site/zh/"
+      href="https://panjiachen.gitee.io/vue-evtp-site/zh/"
     >国内文档</a>
     <dropdown-menu :items="articleList" style="float:left;margin-left:50px;" title="系列文章" />
   </div>

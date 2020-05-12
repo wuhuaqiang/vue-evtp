@@ -127,6 +127,7 @@ import axios from 'axios'
 import { save, delAll, getOneById } from '@/api/evtpPoints'
 import { list } from '@/api/chargingStation'
 import { queryUserList } from '@/api/evtpUser'
+import { getLinesPoints } from '@/utils/baiduMapUtil'
 import { list as pointTypeList } from '@/api/evtpPointsType'
 import { initMap, evtpAction } from '@/api/evtpMap'
 import { goToWork, goToTask } from '@/utils/evtpUserUtil'
@@ -250,7 +251,7 @@ export default {
       console.log(err)
     })
     if ('WebSocket' in window) {
-      this.websocket = new WebSocket('ws://10.168.1.103:2004/websocket')
+      this.websocket = new WebSocket('ws://10.168.1.114:2004/websocket')
       // 连接发生错误的回调方法
       this.websocket.onerror = () => {
         console.log('与服务器连接失败...')
@@ -1612,15 +1613,19 @@ export default {
         // renderOptions: { map: map, autoViewport: false },
         onSearchComplete(results) {
           this_.polygonPath = []
-          console.log(results)
+          // console.log(results)
+          // eslint-disable-next-line no-undef
+          const points = getLinesPoints(results)
           // const points = results.xr[0].dk
-          const points = results.yr[0].dk
-          console.log(points)
+          // const points = results.Fr[0].ik[0].Hr
+          // const points = results.yr[0].dk
+          // console.log(points)
           points.map(obj => {
             // console.log(obj)
-            obj.Ar.map(k => {
-              this_.polygonPath.push(k)
-            })
+            // obj.Hr.map(k => {
+            //   this_.polygonPath.push(k)
+            // })
+            this_.polygonPath.push(obj)
           })
           // console.log('******************************')
           // console.log(results)

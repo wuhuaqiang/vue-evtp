@@ -1,4 +1,5 @@
 import { getDistanceKm, getMillisecond, formatDate, randomNum, uuid } from '@/utils/utils'
+import { getLinePoints } from '@/utils/baiduMapUtil'
 import { save as saveLine } from '@/api/evtpLines'
 import { saveAll as saveLineAllPoint } from '@/api/evtpLinePoints'
 export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, type) {
@@ -26,7 +27,9 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     // console.log(homePosition)
     // console.log(companyPosition)
     // console.log(results)
-    const zr = results.yr[0].dk[0].Ar
+    const points = getLinePoints(results)
+    // const zr = results.Fr[0].ik[0].Hr
+    // const zr = results.yr[0].dk[0].Ar
     // console.log(transit.getStatus())
     if (transit.getStatus() !== 0) {
       return
@@ -92,7 +95,7 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
       // console.log(response)
     })
     const params = []
-    zr.map((obj, index) => {
+    points.map((obj, index) => {
       // console.log(index)
       // console.log(obj)
       const parms = {}
@@ -148,18 +151,8 @@ export function goToTask(BMap, map, startPoint, endPoint, owerId, remark, type) 
     endPosition = addComp.district + addComp.street + addComp.streetNumber
   })
   const searchComplete = (results) => {
-    console.log(results)
-    let zr = null
-    if (results.xr) {
-      zr = results.xr[0].dk[0]
-    } else {
-      zr = results.yr[0].dk[0]
-    }
-    if (zr.Ar) {
-      zr = zr.Ar
-    } else {
-      zr = zr.zr
-    }
+    // console.log(results)
+    const points = getLinePoints(results)
     // console.log(transit.getStatus())
     if (transit.getStatus() !== 0) {
       return
@@ -197,7 +190,7 @@ export function goToTask(BMap, map, startPoint, endPoint, owerId, remark, type) 
       // console.log(response)
     })
     const params = []
-    zr.map((obj, index) => {
+    points.map((obj, index) => {
       // console.log(index)
       // console.log(obj)
       const parms = {}
