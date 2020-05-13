@@ -532,7 +532,7 @@ export default {
           var currPage = results.getPageIndex()// 获取当前是第几页数据
           // const ResultArray = []
           console.log(results)
-          this_.savePointsUtil(results.Br, keyword)
+          this_.savePointsUtil(results.Ir, keyword)
           if (currPage < totalPages - 1) {
             // this_.ResultArray.push(...results.Ar)
             local.gotoPage(currPage + 1)
