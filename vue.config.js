@@ -34,6 +34,15 @@ module.exports = {
       errors: true
     },
     proxy: {
+      // '/api': {
+      //   target: 'http://localhost:2008',
+      //   ws: true,
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     // 替换target中的请求地址，也就是说以后你在请求http://api.jisuapi.com/XXXXX这个地址的时候直接写成/api即可
+      //     '^/api': '/api'
+      //   }
+      // }
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {

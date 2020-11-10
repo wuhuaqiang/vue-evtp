@@ -7,7 +7,9 @@ export function getLinesPoints(result) {
   })
   return points
 }
+
 export function getLinePoints(result) {
-  return result.Fr[0].ik[0].Hr
+  console.log(result)
+  return result.Er[0].ik[0].Gr
 }
 
