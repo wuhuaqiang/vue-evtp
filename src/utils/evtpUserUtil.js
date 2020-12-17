@@ -68,11 +68,13 @@ export function goToWork(BMap, map, startPointStr, endPointStr, owerId, remark, 
     // const newDate = new Date(oldTime - data_T - randomNum(0, 30 * 60 * 100)) // 毫秒转成时间
     // console.log(oldTime)
     // console.log(newDate)
-    const m = randomNum(0, 60 * 60 * 1000)
+    // const m = randomNum(0, 60 * 60 * 1000)
+    // const sTime = oldTime + m
+    const sTime = oldTime
     // console.log(m)
     // const startTime = formatDate(oldTime - date_T - m)
-    const startTime = formatDate(oldTime)
-    const endTime = formatDate(oldTime - m)
+    const startTime = formatDate(sTime)
+    const endTime = formatDate(sTime + data_T)
     // console.log()
     // console.log()
     // console.log(uuid(32))

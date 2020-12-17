@@ -1,7 +1,7 @@
 export function getLinesPoints(result) {
   const points = []
-  result.Fr[0].ik.map(line => {
-    line.Hr.map(point => {
+  result.Er[0].ik.map(line => {
+    line.Gr.map(point => {
       points.push(point)
     })
   })
