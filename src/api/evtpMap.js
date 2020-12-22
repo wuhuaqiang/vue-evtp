@@ -14,4 +14,11 @@ export function evtpAction(query) {
     params: query
   })
 }
+export function initEvtpAction(query) {
+  return request({
+    url: '/refresh',
+    method: 'get',
+    params: query
+  })
+}
 

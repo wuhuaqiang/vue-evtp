@@ -43,14 +43,17 @@
             <!--</el-menu-item>-->
             <!--</el-menu>-->
             <!--</bm-control>-->
+            <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="init-ctr">
+              <el-button size="mini" type="info" icon="el-icon-refresh" class="init-btn" @click="initWebService">初始化容器</el-button>
+            </bm-control>
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="point-ctr">
-              <el-button size="mini" type="primary" icon="el-icon-search" class="point-btn" @click="getPoints">初始化点位</el-button>
+              <el-button size="mini" type="info" icon="el-icon-magic-stick" class="point-btn" @click="getPoints">初始化点位</el-button>
             </bm-control>
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="marker-ctr">
-              <el-button size="mini" type="primary" icon="el-icon-search" class="marker-btn" @click="initMapMarker">初始化覆盖物</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-s-grid" class="marker-btn" @click="initMapMarker">初始化覆盖物</el-button>
             </bm-control>
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="action-ctr">
-              <el-button size="mini" type="primary" icon="el-icon-search" class="action-btn" @click="initAction">模拟</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-video-play" class="action-btn" @click="initAction">模拟</el-button>
             </bm-control>
             <bm-copyright
               anchor="BMAP_ANCHOR_TOP_RIGHT"
@@ -129,7 +132,7 @@ import { list } from '@/api/chargingStation'
 import { queryUserList } from '@/api/evtpUser'
 import { getLinesPoints } from '@/utils/baiduMapUtil'
 import { list as pointTypeList } from '@/api/evtpPointsType'
-import { initMap, evtpAction } from '@/api/evtpMap'
+import { initMap, evtpAction, initEvtpAction } from '@/api/evtpMap'
 import { goToWork, goToTask } from '@/utils/evtpUserUtil'
 import { Queue } from '@/utils/queue'
 import SockJS from 'sockjs-client'
@@ -481,6 +484,18 @@ export default {
           })
         }
       })
+    },
+    initWebService() {
+      initEvtpAction().then((response) => {
+        if (response.code === 200) {
+          this.$message({
+            message: '模拟开始成功',
+            type: 'success'
+          })
+        }
+      })
+      const t1 = window.setTimeout(location.reload(), 30000)
+      window.clearTimeout(t1)
     },
     getPoints() {
       this.ResultArray = []
@@ -1769,7 +1784,7 @@ export default {
     bottom: auto;
     right: auto;
     top: 10px !important;
-    left: 150px !important;
+    left: 250px !important;
   }
   .marker-ctr {
     position: absolute;
@@ -1778,7 +1793,7 @@ export default {
     bottom: auto;
     right: auto;
     top: 10px !important;
-    left: 300px !important;
+    left: 400px !important;
   }
   .action-ctr {
     position: absolute;
@@ -1787,6 +1802,15 @@ export default {
     bottom: auto;
     right: auto;
     top: 10px !important;
-    left: 450px !important;
+    left: 550px !important;
+  }
+  .init-ctr {
+    position: absolute;
+    z-index: 10;
+    text-size-adjust: none;
+    bottom: auto;
+    right: auto;
+    top: 10px !important;
+    left: 100px !important;
   }
 </style>
