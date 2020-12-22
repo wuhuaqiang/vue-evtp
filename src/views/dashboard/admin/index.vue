@@ -47,10 +47,10 @@
               <el-button size="mini" type="info" icon="el-icon-refresh" class="init-btn" @click="initWebService">初始化容器</el-button>
             </bm-control>
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="point-ctr">
-              <el-button size="mini" type="info" icon="el-icon-magic-stick" class="point-btn" @click="getPoints">初始化点位</el-button>
+              <el-button size="mini" type="info" icon="el-icon-magic-stick" class="point-btn" @click="getPoints">初始化基础数据</el-button>
             </bm-control>
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="marker-ctr">
-              <el-button size="mini" type="primary" icon="el-icon-s-grid" class="marker-btn" @click="initMapMarker">初始化覆盖物</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-s-grid" class="marker-btn" @click="initMapMarker">初始化点位</el-button>
             </bm-control>
             <bm-control anchor="BMAP_ANCHOR_TOP_LEFT" class="action-ctr">
               <el-button size="mini" type="primary" icon="el-icon-video-play" class="action-btn" @click="initAction">模拟</el-button>
@@ -469,7 +469,7 @@ export default {
           this.getAllElectricVehicles()
           this.getAllTChargingStation()
           this.$message({
-            message: '初始化成功',
+            message: '初始化点位成功',
             type: 'success'
           })
         }
@@ -489,13 +489,15 @@ export default {
       initEvtpAction().then((response) => {
         if (response.code === 200) {
           this.$message({
-            message: '模拟开始成功',
+            message: '正在初始化请等待！',
             type: 'success'
           })
         }
       })
-      const t1 = window.setTimeout(location.reload(), 30000)
-      window.clearTimeout(t1)
+      setTimeout(this.refresh, 30000)
+    },
+    refresh() {
+      location.reload()
     },
     getPoints() {
       this.ResultArray = []
@@ -518,6 +520,12 @@ export default {
             // console.log('**********************************')
             // this.sleep(6000)
           })
+          if (response.code === 200) {
+            this.$message({
+              message: '初始化基础数据成功',
+              type: 'success'
+            })
+          }
         })
       })
     },
