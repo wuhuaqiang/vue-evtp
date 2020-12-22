@@ -142,6 +142,7 @@ import echarts from 'echarts'
 export default {
   data() {
     return {
+      fullscreenLoading: false,
       stompClient: '',
       isCollapse: true,
       upColor: '#00da3c',
@@ -494,10 +495,25 @@ export default {
           })
         }
       })
+      this.fullscreenLoading = true
+      this.$loading({
+        lock: true,
+        text: '正在初始化请等待!',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       setTimeout(this.refresh, 30000)
     },
+    async logout() {
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
     refresh() {
+      this.logout()
+      this.logout()
+      this.logout()
       location.reload()
+      this.fullscreenLoading = false
     },
     getPoints() {
       this.ResultArray = []
